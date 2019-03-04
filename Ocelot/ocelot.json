@@ -1,0 +1,23 @@
+{
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api/user/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/user/{userId}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "OcelotGateway",
+        "AllowedScopes": []
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:8090"
+  }
+}
