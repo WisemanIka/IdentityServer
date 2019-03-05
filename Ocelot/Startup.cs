@@ -21,30 +21,17 @@ namespace Ocelot.Gateway
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+
             services.AddAuthentication()
                 .AddIdentityServerAuthentication("IdentityServiceApiKey", options =>
                 {
                     options.Authority = "http://localhost:8080";
                     options.ApiName = "BasketAPI";
                     options.RequireHttpsMetadata = false;
-                    //options.SupportedTokens = SupportedTokens.Both;
-                    //options.ApiSecret = "c0359956-eb75-480b-adde-2c33de5f3900";
-                    //options.Events = new JwtBearerEvents
-                    //{
-                    //    OnAuthenticationFailed = async ctx =>
-                    //    {
-                    //        int i = 0;
-                    //    },
-                    //    OnTokenValidated = async ctx =>
-                    //    {
-                    //        int i = 0;
-                    //    }
-                    //};
                 });
 
             services.AddOcelot(Configuration);
-
-            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Ocelot", "2.Ocelot", "{B9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocelot.Gateway", "Ocelot\Ocelot.Gateway.csproj", "{A3BE9C8B-60E7-4441-B68E-16866DEF8E4A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Services", "3.Services", "{0208B4D9-E41F-41B1-9F48-5FBC8CA06116}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Fox.Services", "3.Fox.Services", "{0208B4D9-E41F-41B1-9F48-5FBC8CA06116}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fox.BasketApi", "Fox.BasketApi\Fox.BasketApi.csproj", "{E1453906-4646-4B1A-8F1E-BD0C148B36C9}"
 EndProject

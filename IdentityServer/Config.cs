@@ -18,15 +18,16 @@ namespace IdentityServer
         {
             return new ApiResource[]
             {
-                new ApiResource
-                {
-                    Name = "BasketApi",
-                    DisplayName = "Basket API",
-                    ApiSecrets =
-                    {
-                        new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
-                    }
-                }
+                new ApiResource("BasketAPI", "Basket API Desc")
+                //new ApiResource
+                //{
+                //    Name = "BasketApi",
+                //    DisplayName = "Basket API",
+                //    ApiSecrets =
+                //    {
+                //        new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
+                //    }
+                //}
             };
         }
 

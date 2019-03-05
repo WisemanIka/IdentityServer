@@ -12,7 +12,7 @@ namespace Fox.BasketApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
+                .AddIdentityServerAuthentication("IdentityServiceApiKey", options =>
                 {
                     options.Authority = "http://localhost:8080";
                     options.ApiName = "BasketApi";

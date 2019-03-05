@@ -34,7 +34,7 @@ namespace Test
                 Address = discover.TokenEndpoint,
                 ClientId = "Angular",
                 ClientSecret = "c0359956-eb75-480b-adde-2c33de5f3900",
-                Scope = "OcelotAPI"
+                Scope = "BasketAPI"
             });
 
             if (tokenResponse.IsError)

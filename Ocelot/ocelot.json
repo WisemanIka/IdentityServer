@@ -11,11 +11,7 @@
       "UpstreamPathTemplate": "/basket",
       "UpstreamHttpMethod": [ "Get" ],
       "ReRouteIsCaseSensitive": false,
-      "DownstreamScheme": "http",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "IdentityServiceApiKey",
-        "AllowedScopes": []
-      }
+      "DownstreamScheme": "http"
     }
   ],
   "GlobalConfiguration": {
