@@ -1,8 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
-using IdentityServer4.Models;
+﻿using IdentityServer4.Models;
 using System.Collections.Generic;
 
 namespace IdentityServer
@@ -13,7 +9,8 @@ namespace IdentityServer
         {
             return new IdentityResource[]
             {
-                new IdentityResources.OpenId()
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile()
             };
         }
 
@@ -21,8 +18,15 @@ namespace IdentityServer
         {
             return new ApiResource[]
             {
-                new ApiResource("OcelotAPI", "Ocelot Gateway API"),
-                //new ApiResource("ProductAPI", "Product API")
+                new ApiResource
+                {
+                    Name = "BasketApi",
+                    DisplayName = "Basket API",
+                    ApiSecrets =
+                    {
+                        new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
+                    }
+                }
             };
         }
 
@@ -30,19 +34,20 @@ namespace IdentityServer
         {
             return new Client[]
             {
-                new Client
-                {
-                    ClientId = "Angular",
-                    ClientName = "Angular SPA",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = {
-                        new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
-                    },
-                    AllowedScopes = {
-                        "OcelotAPI",
-                        //"ProductAPI"
-                    }
-                }
+                //new Client
+                //{
+                //    ClientId = "Angular",
+                //    ClientName = "Angular SPA",
+                //    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                //    ClientSecrets = {
+                //        new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
+                //    },
+                //    AllowedScopes = {
+                //        "BasketAPI",
+                //        IdentityServerConstants.StandardScopes.OpenId,
+                //        IdentityServerConstants.StandardScopes.Profile
+                //    }
+                //}
             };
         }
     }

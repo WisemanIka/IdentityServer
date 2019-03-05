@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,23 +19,34 @@ namespace Ocelot.Gateway
             this.Configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication()
-                .AddIdentityServerAuthentication("OcelotGateway", options =>
+                .AddIdentityServerAuthentication("IdentityServiceApiKey", options =>
                 {
-                    options.ApiName = "IdentityServer";
-                    options.ApiSecret = "c0359956-eb75-480b-adde-2c33de5f3900";
                     options.Authority = "http://localhost:8080";
+                    options.ApiName = "BasketAPI";
                     options.RequireHttpsMetadata = false;
+                    //options.SupportedTokens = SupportedTokens.Both;
+                    //options.ApiSecret = "c0359956-eb75-480b-adde-2c33de5f3900";
+                    //options.Events = new JwtBearerEvents
+                    //{
+                    //    OnAuthenticationFailed = async ctx =>
+                    //    {
+                    //        int i = 0;
+                    //    },
+                    //    OnTokenValidated = async ctx =>
+                    //    {
+                    //        int i = 0;
+                    //    }
+                    //};
                 });
 
             services.AddOcelot(Configuration);
+
+            services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -40,12 +54,11 @@ namespace Ocelot.Gateway
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseOcelot().Wait();
+            app.UseAuthentication();
 
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync("Hello World!");
-            //});
+            app.UseMvc();
+
+            app.UseOcelot().Wait();
         }
     }
 }
