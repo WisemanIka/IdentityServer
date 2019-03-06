@@ -1,10 +1,10 @@
-﻿using System;
-using IdentityServer4.AccessTokenValidation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -21,14 +21,15 @@ namespace Ocelot.Gateway
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+
+            var key = "IdentityServiceApiKey";
 
             services.AddAuthentication()
-                .AddIdentityServerAuthentication("IdentityServiceApiKey", options =>
+                .AddIdentityServerAuthentication(key, options =>
                 {
                     options.Authority = "http://localhost:8080";
-                    options.ApiName = "BasketAPI";
                     options.RequireHttpsMetadata = false;
+                    options.ApiName = "ocelot";
                 });
 
             services.AddOcelot(Configuration);
@@ -40,11 +41,7 @@ namespace Ocelot.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseAuthentication();
-
-            app.UseMvc();
-
+            
             app.UseOcelot().Wait();
         }
     }

@@ -24,8 +24,6 @@ namespace IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
@@ -33,12 +31,14 @@ namespace IdentityServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
+
             var builder = services.AddIdentityServer()
-                .AddInMemoryPersistedGrants()
-                .AddAspNetIdentity<User>()
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddDeveloperSigningCredential()
+                //.AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients());
+                //.AddAspNetIdentity<User>();
 
             if (Environment.IsDevelopment())
             {
@@ -65,7 +65,7 @@ namespace IdentityServer
 
             app.UseIdentityServer();
 
-            app.UseMvc();
+            app.UseMvcWithDefaultRoute();
 
             app.UseSwagger();
 

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -34,7 +35,7 @@ namespace Test
                 Address = discover.TokenEndpoint,
                 ClientId = "Angular",
                 ClientSecret = "c0359956-eb75-480b-adde-2c33de5f3900",
-                Scope = "BasketAPI"
+                Scope = "basket"
             });
 
             if (tokenResponse.IsError)
@@ -46,6 +47,39 @@ namespace Test
             var tokeResponseSerialize = JsonConvert.SerializeObject(tokenResponse.Json);
             _testOutputHelper.WriteLine(tokeResponseSerialize);
             _testOutputHelper.WriteLine("\n\n");
+
+            // call api
+            var apiClient = new HttpClient();
+            apiClient.SetBearerToken(tokenResponse.AccessToken);
+
+            var response = await apiClient.GetAsync("http://localhost:5000/basket");
+            if (!response.IsSuccessStatusCode)
+            {
+                _testOutputHelper.WriteLine(JsonConvert.SerializeObject(response.StatusCode));
+            }
+            else
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                _testOutputHelper.WriteLine(JsonConvert.SerializeObject(content));
+            }
+        }
+
+        [Fact]
+        public async Task IdentityServerClientWithOcelotTest()
+        {
+            var apiClient = new HttpClient();
+            //apiClient.SetBearerToken(tokenResponse.AccessToken);
+
+            var response = await apiClient.GetAsync("http://localhost:5000/basket");
+            if (!response.IsSuccessStatusCode)
+            {
+                _testOutputHelper.WriteLine(JsonConvert.SerializeObject(response.StatusCode));
+            }
+            else
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                _testOutputHelper.WriteLine(JsonConvert.SerializeObject(content));
+            }
         }
     }
 }

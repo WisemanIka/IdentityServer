@@ -1,17 +1,16 @@
 {
   "ReRoutes": [
     {
+      "DownstreamPathTemplate": "/api/Basket",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 8085
         }
       ],
-      "DownstreamPathTemplate": "/api/Basket",
       "UpstreamPathTemplate": "/basket",
-      "UpstreamHttpMethod": [ "Get" ],
-      "ReRouteIsCaseSensitive": false,
-      "DownstreamScheme": "http"
+      "UpstreamHttpMethod": []
     }
   ],
   "GlobalConfiguration": {

@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.Models;
 using System.Collections.Generic;
+using IdentityServer4;
 
 namespace IdentityServer
 {
@@ -18,7 +19,7 @@ namespace IdentityServer
         {
             return new ApiResource[]
             {
-                new ApiResource("BasketAPI", "Basket API Desc")
+                new ApiResource("basket", "Basket API Desc")
                 //new ApiResource
                 //{
                 //    Name = "BasketApi",
@@ -35,20 +36,18 @@ namespace IdentityServer
         {
             return new Client[]
             {
-                //new Client
-                //{
-                //    ClientId = "Angular",
-                //    ClientName = "Angular SPA",
-                //    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                //    ClientSecrets = {
-                //        new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
-                //    },
-                //    AllowedScopes = {
-                //        "BasketAPI",
-                //        IdentityServerConstants.StandardScopes.OpenId,
-                //        IdentityServerConstants.StandardScopes.Profile
-                //    }
-                //}
+                new Client
+                {
+                    ClientId = "Angular",
+                    ClientName = "Angular SPA",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientSecrets = {
+                        new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
+                    },
+                    AllowedScopes = {
+                        "basket"
+                    }
+                }
             };
         }
     }

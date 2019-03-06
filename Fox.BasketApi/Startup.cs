@@ -1,4 +1,4 @@
-﻿using IdentityServer4.AccessTokenValidation;
+﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,17 +11,17 @@ namespace Fox.BasketApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication()
-                .AddIdentityServerAuthentication("IdentityServiceApiKey", options =>
+            services.AddMvc();
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = "http://localhost:8080";
-                    options.ApiName = "BasketApi";
                     options.RequireHttpsMetadata = false;
-                    //options.SupportedTokens = SupportedTokens.Both;
-                    //options.ApiSecret = "c0359956-eb75-480b-adde-2c33de5f3900";
+                    options.ApiName = "basket";
                 });
-
-            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,9 +32,10 @@ namespace Fox.BasketApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
-
             app.UseAuthentication();
+
+            app.UseMvcWithDefaultRoute();
+
         }
     }
 }
