@@ -1,17 +1,15 @@
 ﻿using IdentityServer4.Models;
 using System.Collections.Generic;
-using IdentityServer4;
 
-namespace IdentityServer
+namespace IdentityServer.Configurations
 {
-    public static class Config
+    public static class IdentityServerConfigurations
     {
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new IdentityResource[]
             {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.OpenId()
             };
         }
 
@@ -20,15 +18,6 @@ namespace IdentityServer
             return new ApiResource[]
             {
                 new ApiResource("basket", "Basket API Desc")
-                //new ApiResource
-                //{
-                //    Name = "BasketApi",
-                //    DisplayName = "Basket API",
-                //    ApiSecrets =
-                //    {
-                //        new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
-                //    }
-                //}
             };
         }
 

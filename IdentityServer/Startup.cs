@@ -1,5 +1,10 @@
-﻿using System;
-using IdentityServer.Data;
+﻿using System.Reflection;
+using AutoMapper;
+using Fox.Common.Infrastructure;
+using Fox.Common.Logger;
+using IdentityServer.Configurations;
+using IdentityServer.Configurations.AutoMapper;
+using IdentityServer.Infrastructure;
 using IdentityServer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,36 +29,44 @@ namespace IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<IdentityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+            services.AddIdentity<User, Role>(options =>
+                {
+                    options.User.RequireUniqueEmail = true;
+                    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_";
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireNonAlphanumeric = false;
+                })
+                .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
 
-            var builder = services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                //.AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients());
-                //.AddAspNetIdentity<User>();
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(BaseMapping)));
+            Mapper.AssertConfigurationIsValid();
 
-            if (Environment.IsDevelopment())
-            {
-                builder.AddDeveloperSigningCredential();
-            }
-            else
-            {
-                throw new Exception("need to configure key material");
-            }
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
+                .AddInMemoryIdentityResources(IdentityServerConfigurations.GetIdentityResources())
+                .AddInMemoryApiResources(IdentityServerConfigurations.GetApiResources())
+                .AddInMemoryClients(IdentityServerConfigurations.GetClients())
+                .AddAspNetIdentity<User>();
+
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            var logger = new Logger();
+            services.AddSingleton<ILogger>(logger);
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "IdentityServer Api", Version = "v1" });
             });
-
         }
 
         public void Configure(IApplicationBuilder app)
