@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Fox.Common.Infrastructure;
 using Fox.Common.Responses;
@@ -23,8 +24,9 @@ namespace IdentityServer.Controllers
             this.Logger = logger;
         }
 
-        [HttpPost("Register")]
         [AllowAnonymous]
+        [HttpPost("Register")]
+        [ProducesResponseType(typeof(RegistrationResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Register([FromBody]RegistrationRequest registration)
         {
             try
@@ -34,22 +36,58 @@ namespace IdentityServer.Controllers
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Bom.Identity.Api");
+                Logger.LogException(ex, "IdentityServer.Api");
                 return BadRequest(ex);
             }
         }
 
-        [HttpPost("ConfirmEmail")]
+        [HttpPost("Login")]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Login([FromBody]LoginRequest request)
+        {
+            try
+            {
+                var loginResponse = await AccountService.Login(request);
+                return Ok(loginResponse);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "IdentityServer.Api");
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("CheckEmail")]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CheckEmail(string email)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+                    return BadRequest();
+
+                var emailExists = await AccountService.CheckEmailExistence(email);
+                return Ok(emailExists);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "IdentityServer.Api");
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("ConfirmEmail")]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             try
             {
-                var register = await AccountService.Registration(registration);
+                var register = await AccountService.ConfirmEmail(userId, token);
                 return Ok(register);
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Bom.Identity.Api");
+                Logger.LogException(ex, "IdentityServer.Api");
                 return BadRequest(ex);
             }
         }

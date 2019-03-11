@@ -17,7 +17,7 @@ namespace IdentityServer.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.HasDefaultSchema("Identity");
+            builder.HasDefaultSchema("Principal");
             builder.AddEntityConfigurations(GetType().GetTypeInfo().Assembly, nameof(IdentityContext));
             builder.Entity<User>().ToTable("Users");
             builder.Entity<IdentityRole>().ToTable("Roles");

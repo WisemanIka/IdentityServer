@@ -1,28 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Policy;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
+using Fox.Common.Providers.EmailSender;
 using IdentityServer.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 namespace IdentityServer.Infrastructure
 {
     public class AccountService : BaseService, IAccountService
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IEmailSender _emailSender;
 
-        public AccountService(UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager,
+        public AccountService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IEmailSender emailSender,
             ILogger logger, IdentityContext ctx) : base(logger, ctx)
         {
             this._userManager = userManager;
             this._roleManager = roleManager;
             this._signInManager = signInManager;
+            this._emailSender = emailSender;
         }
 
         public async Task<RegistrationResponse> Registration(RegistrationRequest request)
@@ -34,9 +40,15 @@ namespace IdentityServer.Infrastructure
 
                 if (result.Succeeded)
                 {
-                    var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(userDbModel);
+                    var emailToken = HttpUtility.UrlEncode(await _userManager.GenerateEmailConfirmationTokenAsync(userDbModel));
 
-                    await _userManager.ConfirmEmailAsync(userDbModel, emailToken);
+                    var baseUrl = MyHttpContext.AppBaseUrl;
+
+                    var confirmEmailCallBack = string.Format(baseUrl + "/api/Account/ConfirmEmail?userId={0}&token={1}", userDbModel.Id, emailToken);
+
+                    var emailBody = "გთხოვთ დაადასტუროთ ემაილი დააჭირეთ <a href='" + confirmEmailCallBack + "'>აქ</a>";
+
+                    await _emailSender.SendEmailAsync(userDbModel.Email, "Email Confirmation", emailBody);
                 }
 
                 return new RegistrationResponse
@@ -49,7 +61,7 @@ namespace IdentityServer.Infrastructure
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Bom.Identity.Api - AccountService Registration");
+                Logger.LogException(ex, "IdentityServer.Api - AccountService Registration");
                 return null;
             }
         }
@@ -58,18 +70,25 @@ namespace IdentityServer.Infrastructure
         {
             try
             {
-                var response = new LoginResponse();
-                var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, lockoutOnFailure: false);
+                var user = await _userManager.FindByEmailAsync(request.Email);
+                if (user == null) return new LoginResponse();
 
-                if (result.Succeeded)
+                var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, lockoutOnFailure: true);
+
+                if (!result.Succeeded || !user.EmailConfirmed) return new LoginResponse();
+
+                var response = new LoginResponse
                 {
-                    var user = await _userManager.FindByEmailAsync(request.Email);
-                }
+                    Succeeded = result.Succeeded && user.EmailConfirmed,
+                    Token = GenerateToken(user)
+                };
+
                 return response;
+
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Bom.Identity.Api - AccountService Login");
+                Logger.LogException(ex, "IdentityServer.Api - AccountService Login");
                 return null;
             }
         }
@@ -83,9 +102,50 @@ namespace IdentityServer.Infrastructure
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Bom.Identity.Api - AccountService CheckEmailExistence");
+                Logger.LogException(ex, "IdentityServer.Api - AccountService CheckEmailExistence");
                 return true;
             }
+        }
+
+        public async Task<bool> ConfirmEmail(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            return result.Succeeded;
+        }
+
+        private string GenerateToken(User user)
+        {
+            //var issuer = "http://www.fox.ge";
+            var identityClaims = new ClaimsIdentity(new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.GivenName, user.Firstname),
+                new Claim(ClaimTypes.Surname, user.Lastname)
+            });
+
+            //foreach (var claim in claims)
+            //{
+            //    identityClaims.AddClaim(new Claim(claim.Type, claim.Value));
+            //}
+
+            var secretKey = Encoding.ASCII.GetBytes("xd3RCPJXoWwYJiA7");
+            var credentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = identityClaims,
+                Expires = DateTime.UtcNow.AddMinutes(5),
+                SigningCredentials = credentials
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var createToken = tokenHandler.CreateToken(tokenDescriptor);
+            var token = tokenHandler.WriteToken(createToken);
+
+            return token;
         }
     }
 }

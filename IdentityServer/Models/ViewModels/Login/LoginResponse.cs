@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace IdentityServer.Models
+﻿namespace IdentityServer.Models
 {
     public class LoginResponse
     {
+        public LoginResponse()
+        {
+            Succeeded = false;
+            Token = string.Empty;
+        }
+        public string Token { get; set; }
+        public bool Succeeded { get; set; }
     }
 }

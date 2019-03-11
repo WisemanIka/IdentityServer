@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using AutoMapper;
+using Fox.Common.Configurations;
+using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
 using Fox.Common.Logger;
 using IdentityServer.Configurations;
@@ -32,15 +34,17 @@ namespace IdentityServer
             services.AddDbContext<IdentityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
-            services.AddIdentity<User, Role>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
                 {
                     options.User.RequireUniqueEmail = true;
+                    options.User.RequireUniqueEmail = true;
                     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_";
+
                     options.Password.RequireDigit = true;
                     options.Password.RequireLowercase = true;
                     options.Password.RequireUppercase = false;
-                    options.Password.RequiredLength = 6;
                     options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = 6;
                 })
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
@@ -57,6 +61,10 @@ namespace IdentityServer
                 .AddInMemoryClients(IdentityServerConfigurations.GetClients())
                 .AddAspNetIdentity<User>();
 
+            var emailSenderService = Configuration.GetSection("EmailSenderSettings").Get<EmailSenderSettings>();
+            services.RegisterEmailService(emailSenderService);
+
+            services.RegisterCommonServices();
             services.AddScoped<IAccountService, AccountService>();
             services.AddSingleton<IConfiguration>(Configuration);
 
@@ -75,6 +83,8 @@ namespace IdentityServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseHttpContext();
 
             app.UseIdentityServer();
 

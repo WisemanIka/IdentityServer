@@ -11,5 +11,8 @@ namespace IdentityServer.Models
         [Required(ErrorMessage = "The password is required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Required]
+        public bool RememberMe { get; set; }
     }
 }
