@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.Models;
 using System.Collections.Generic;
+using IdentityServer4;
 
 namespace IdentityServer.Configurations
 {
@@ -9,7 +10,8 @@ namespace IdentityServer.Configurations
         {
             return new IdentityResource[]
             {
-                new IdentityResources.OpenId()
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile()
             };
         }
 
@@ -17,8 +19,8 @@ namespace IdentityServer.Configurations
         {
             return new ApiResource[]
             {
-                new ApiResource("basket", "Basket API Desc"),
-                new ApiResource("ocelot", "API Gateway"), 
+                new ApiResource("ocelot", "API Gateway"),
+                new ApiResource("basket", "Basket API Desc")
             };
         }
 
@@ -30,13 +32,37 @@ namespace IdentityServer.Configurations
                 {
                     ClientId = "Angular",
                     ClientName = "Angular SPA",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
+                    RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
+                    PostLogoutRedirectUris = { "https://www.getpostman.com" },
                     AllowedCorsOrigins = new [] { "http://localhost:4200/" },
                     ClientSecrets = {
                         new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
                     },
                     AllowedScopes = {
                         "basket"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "Postman",
+                    ClientName = "Postman Test Client",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
+                    RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
+                    PostLogoutRedirectUris = { "https://www.getpostman.com" },
+                    AllowedCorsOrigins = { "https://www.getpostman.com" },
+                    ClientSecrets = {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = {
+                        "ocelot",
+                        "basket",
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
                     }
                 }
             };

@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,15 +15,19 @@ namespace Fox.BasketApi
                 .AddAuthorization()
                 .AddJsonFormatters();
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            //services.AddAuthentication("Bearer")
-            //    .AddIdentityServerAuthentication(options =>
-            //    {
-            //        options.Authority = "http://localhost:8080";
-            //        options.RequireHttpsMetadata = false;
-            //        options.ApiName = "basket";
-            //    });
+            services.AddAuthentication(o =>
+                {
+                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "http://localhost:8080";
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "ocelot";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +38,7 @@ namespace Fox.BasketApi
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
 
             app.UseMvcWithDefaultRoute();
 
