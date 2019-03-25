@@ -31,6 +31,7 @@ namespace IdentityServer.Configurations
                     ClientId = "Angular",
                     ClientName = "Angular SPA",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedCorsOrigins = new [] { "http://localhost:4200/" },
                     ClientSecrets = {
                         new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
                     },
