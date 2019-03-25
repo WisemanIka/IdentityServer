@@ -103,17 +103,26 @@ namespace IdentityServer.Infrastructure
             catch (Exception ex)
             {
                 Logger.LogException(ex, "IdentityServer.Api - AccountService CheckEmailExistence");
-                return true;
+                return false;
             }
         }
 
         public async Task<bool> ConfirmEmail(string userId, string token)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
 
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+                var result = await _userManager.ConfirmEmailAsync(user, token);
 
-            return result.Succeeded;
+                return result.Succeeded;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "IdentityServer.Api - AccountService CheckEmailExistence");
+                return false;
+            }
+            
         }
 
         private string GenerateToken(User user)

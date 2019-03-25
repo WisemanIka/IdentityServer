@@ -1,9 +1,7 @@
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -51,24 +49,6 @@ namespace Test
             // call api
             var apiClient = new HttpClient();
             apiClient.SetBearerToken(tokenResponse.AccessToken);
-
-            var response = await apiClient.GetAsync("http://localhost:5000/basket");
-            if (!response.IsSuccessStatusCode)
-            {
-                _testOutputHelper.WriteLine(JsonConvert.SerializeObject(response.StatusCode));
-            }
-            else
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                _testOutputHelper.WriteLine(JsonConvert.SerializeObject(content));
-            }
-        }
-
-        [Fact]
-        public async Task IdentityServerClientWithOcelotTest()
-        {
-            var apiClient = new HttpClient();
-            //apiClient.SetBearerToken(tokenResponse.AccessToken);
 
             var response = await apiClient.GetAsync("http://localhost:5000/basket");
             if (!response.IsSuccessStatusCode)

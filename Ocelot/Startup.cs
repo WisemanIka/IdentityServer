@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -21,10 +19,9 @@ namespace Ocelot.Gateway
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             var key = "IdentityServiceApiKey";
 
-            services.AddAuthentication()
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(key, options =>
                 {
                     options.Authority = "http://localhost:8080";
@@ -41,7 +38,10 @@ namespace Ocelot.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
+           
+            //app.UseAuthentication();
+
             app.UseOcelot().Wait();
         }
     }

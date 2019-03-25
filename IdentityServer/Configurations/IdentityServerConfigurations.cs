@@ -17,7 +17,8 @@ namespace IdentityServer.Configurations
         {
             return new ApiResource[]
             {
-                new ApiResource("basket", "Basket API Desc")
+                new ApiResource("basket", "Basket API Desc"),
+                new ApiResource("ocelot", "API Gateway"), 
             };
         }
 
