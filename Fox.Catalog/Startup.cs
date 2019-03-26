@@ -1,20 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Reflection;
+using AutoMapper;
+using Fox.Catalog.Extensions;
+using Fox.Common.Configurations;
+using Fox.Common.Infrastructure;
+using Fox.Common.Logger;
+using Fox.Common.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Fox.Catalog
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public Startup(IConfiguration configuration, IConfigurationRepository configurationRepository)
+        {
+            Configuration = configuration;
+            ConfigurationRepository = configurationRepository;
+        }
+
+        public IConfiguration Configuration { get; }
+        public IConfigurationRepository ConfigurationRepository { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CatalogCorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
+            services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(Profile)));
+            Mapper.AssertConfigurationIsValid();
+
+            //Register Custom Services
+            services.RegisterServices();
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            //Get Environment Configurations
+            var environment = Configuration.GetSection("MongoConnection:Environment").Value;
+            var configurationDocument = ConfigurationRepository.ReadConfiguration(environment).Result;
+
+            //From Configuration Collection take only Product Configs
+            var productConfiguration = configurationDocument.GetAs<ConfigurationDocument>("Product");
+
+            var productConnectionString = productConfiguration.GetAs<string>("ConnectionString");
+            var productDatabase = productConfiguration.GetAs<string>("Database");
+
+            services.Configure<MongoSettings>(
+                options =>
+                {
+                    options.ConnectionString = productConnectionString;
+                    options.Database = productDatabase;
+                });
+
+            var elasticSearchIndex = productConfiguration.GetAs<string>("ElasticSearchIndex");
+            var elasticSearchProvider = new ElasticSearchProvider(configurationDocument, elasticSearchIndex);
+            var logger = new Logger(elasticSearchProvider);
+
+            services.AddSingleton<ILogger>(logger);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Catalog Api", Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -24,10 +82,22 @@ namespace Fox.Catalog
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.Run(async (context) =>
+            else
             {
-                await context.Response.WriteAsync("Hello World!");
+                app.UseHsts();
+            }
+
+            app.UseCors("CatalogCorsPolicy");
+
+            app.UseAuthentication();
+
+            app.UseMvc();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Catalog Api V1");
             });
         }
     }

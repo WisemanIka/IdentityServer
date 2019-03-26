@@ -20,6 +20,5 @@ namespace Fox.Common.Infrastructure
             var result = await collection.Where(x => x.Environment == environment).FirstOrDefaultAsync();
             return result?.ConfigurationDocument;
         }
-
     }
 }

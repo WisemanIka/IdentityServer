@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Fox.Common.Extensions
 {
-    public static class HttpContextExtension
+    public static class HttpContextExtensions
     {
         public static IApplicationBuilder UseHttpContext(this IApplicationBuilder app)
         {
