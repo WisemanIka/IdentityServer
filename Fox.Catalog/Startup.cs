@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using AutoMapper;
+using Fox.Catalog.Configurations.AutoMapper;
 using Fox.Catalog.Extensions;
 using Fox.Common.Configurations;
 using Fox.Common.Infrastructure;
@@ -38,7 +39,7 @@ namespace Fox.Catalog
 
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
-            services.AddAutoMapper(Assembly.GetAssembly(typeof(Profile)));
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(ProductMapping)));
             Mapper.AssertConfigurationIsValid();
 
             //Register Custom Services

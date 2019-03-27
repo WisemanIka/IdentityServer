@@ -5,6 +5,7 @@ namespace Fox.Catalog.Models.ViewModels.Product
 {
     public class CreateProductRequest
     {
+        public string Id { get; set; }
         public string UserId { get; set; }
         public List<string> CategoryId { get; set; }
         public string ProviderId { get; set; }

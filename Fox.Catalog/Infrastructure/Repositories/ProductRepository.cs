@@ -95,6 +95,12 @@ namespace Fox.Catalog.Infrastructure.Repositories
             return model;
         }
 
+        public async Task SaveRevision(Products revision)
+        {
+
+            //await _ctx.GetCollection<ProductRevisions>().InsertOneAsync(revision);
+        }
+
         public async Task<bool> Delete(string id)
         {
             var product = (await GetProducts(new GetProductRequest { Id = id })).Single();
@@ -102,8 +108,7 @@ namespace Fox.Catalog.Infrastructure.Repositories
             if (product == null)
                 return false;
 
-            product.IsDeleted = true;
-            product.UpdatedAt = DateTime.UtcNow;
+            //product.IsDeleted = true;
             await Save(product);
 
             return true;

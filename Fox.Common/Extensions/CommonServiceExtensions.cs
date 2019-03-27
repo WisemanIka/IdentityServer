@@ -11,6 +11,7 @@ namespace Fox.Common.Extensions
     {
         public static void RegisterCommonServices(this IServiceCollection services)
         {
+            services.AddSingleton<IMongoContext, MongoContext>();
             services.AddSingleton<IConfigurationRepository, ConfigurationRepository>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

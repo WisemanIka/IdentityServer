@@ -15,7 +15,7 @@ namespace Fox.Catalog.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ValidationModel]
-    [Authorize]
+    //[Authorize]
     public class CatalogController : ControllerBase
     {
         public readonly ILogger Logger;
@@ -59,15 +59,16 @@ namespace Fox.Catalog.Controllers
             }
         }
 
-        [HttpPost("Create")]
+        [HttpPost("Save")]
         [ProducesResponseType(typeof(ValidationResultModel<ProductResponse>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Create([FromBody]CreateProductRequest request)
+        public async Task<IActionResult> Save([FromBody]CreateProductRequest request)
         {
             try
             {
                 request.UserId = User.GetUserId();
 
                 var result = await ProductService.Save(request);
+
                 return Ok(result);
             }
             catch (Exception ex)

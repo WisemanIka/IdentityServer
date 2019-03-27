@@ -10,15 +10,16 @@ namespace Fox.Catalog.Configurations.AutoMapper
     {
         public ProductMapping()
         {
-            CreateMap<CreateProductRequest, Products>(MemberList.Source)
-                .ForMember(dest => dest.CreatedBy, source => source.MapFrom(s => s.UserId))
-                .ForMember(dest => dest.CreatedAt, source => source.MapFrom(s => DateTime.UtcNow))
-                .IgnoreAllNonExisting();
+            CreateMap<CreateProductRequest, Products>(MemberList.None)
+                .IgnoreAllNonExisting()
+                .ForMember(dest => dest.Id, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.MapFrom(s => s.UserId))
+                .ForMember(dest => dest.CreatedAt, src => src.UseValue(DateTime.UtcNow));
 
-            CreateMap<CreateProductRequest, Products>(MemberList.Source)
-                .ForMember(dest => dest.UpdatedBy, source => source.MapFrom(s => s.UserId))
-                .ForMember(dest => dest.UpdatedAt, source => source.MapFrom(s => DateTime.UtcNow))
-                .IgnoreAllNonExisting();
+
+            CreateMap<Products, ProductRevisions>(MemberList.None)
+                .ForMember(dest => dest.Id, src => src.MapFrom(s => s.Id))
+                .ForMember(dest => dest.Revisions, src => src.MapFrom(s => s));
         }
     }
 }

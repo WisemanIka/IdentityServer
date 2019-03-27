@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Fox.Catalog.Infrastructure.Interfaces;
 using Fox.Catalog.Models;
 using Fox.Catalog.Models.ViewModels.Product;
@@ -45,12 +46,30 @@ namespace Fox.Catalog.Infrastructure.Services
         {
             var result = new ValidationResultModel<ProductResponse>();
 
-            if (result.Succeeded)
+            if (!result.Succeeded) return result;
+
+            var isEdit = !string.IsNullOrWhiteSpace(model.Id);
+
+            Products product = null;
+
+            if (isEdit)
             {
-                var productDbModel = model.Map<CreateProductRequest, Products>();
-                productDbModel = await _productRepository.Save(productDbModel);
-                result.Model = productDbModel.Map<Products, ProductResponse>();
+                product = (await _productRepository.GetProducts(new GetProductRequest { Id = model.Id })).SingleOrDefault();
             }
+
+            var productDbModel = isEdit && product != null ?
+                                model.Map<CreateProductRequest, Products>(product) :
+                                model.Map<CreateProductRequest, Products>();
+
+            productDbModel = await _productRepository.Save(productDbModel);
+
+            if (isEdit)
+            {
+                //var revision = product.Map<Products, ProductRevisions>();
+                await _productRepository.SaveRevision(product);
+            }
+
+            result.Model = productDbModel.Map<Products, ProductResponse>();
 
             return result;
         }

@@ -11,7 +11,7 @@ namespace Fox.Catalog
     public class Program
     {
         public static void Main(string[] args)
-        {
+        { 
             var appSettingsConfiguration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
