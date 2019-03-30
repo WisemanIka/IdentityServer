@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
@@ -7,13 +8,13 @@ namespace Fox.Common.Extensions
 {
     public static class AutoMapperExtensions
     {
-        public static TDest Map<TSource, TDest>(this TSource source)
+        public static TDest Map<TSource, TDest>(this TSource source, TDest dest = null)
             where TSource : class
             where TDest : class, new()
         {
             if (source == null) return null;
 
-            var result = Mapper.Map(source, new TDest());
+            var result = Mapper.Map(source, dest ?? new TDest());
 
             return result;
         }
