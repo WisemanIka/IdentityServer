@@ -62,8 +62,7 @@ namespace Fox.Catalog.Infrastructure.Services
                                 model.Map<CreateProductRequest, Products>();
 
             productDbModel = await _productRepository.Save(productDbModel);
-
-
+            
             //Rabbit Call Here
             if (isEdit)
             {

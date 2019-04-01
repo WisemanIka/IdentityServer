@@ -3,6 +3,8 @@ using AutoMapper;
 using Fox.Catalog.Configurations.AutoMapper;
 using Fox.Catalog.Extensions;
 using Fox.Common.Configurations;
+using Fox.Common.Configurations.RabbitMQ;
+using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
 using Fox.Common.Logger;
 using Fox.Common.Providers;
@@ -69,11 +71,20 @@ namespace Fox.Catalog
 
             services.AddSingleton<ILogger>(logger);
 
+            services.RegisterRabbitMqService();
+
+            services.Configure<RabbitMQSettings>(
+                options =>
+                {
+                    options.HostName = "localhost";
+                    options.Username = "guest";
+                    options.Password = "guest";
+                });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Catalog Api", Version = "v1" });
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

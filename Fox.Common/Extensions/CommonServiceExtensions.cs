@@ -17,6 +17,11 @@ namespace Fox.Common.Extensions
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
+        public static void RegisterRabbitMqService(this IServiceCollection services)
+        {
+            services.AddSingleton<IRabbitMQContext, RabbitMQContext>();
+        }
+
         public static void RegisterEmailService(this IServiceCollection services, EmailSenderSettings emailSenderSettings)
         {
             services.AddTransient<IEmailSender, EmailSender>(i =>
