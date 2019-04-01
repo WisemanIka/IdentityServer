@@ -49,7 +49,7 @@ namespace IdentityServer.Configurations
                 {
                     ClientId = "Postman",
                     ClientName = "Postman Test Client",
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = false,
                     RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
