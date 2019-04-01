@@ -2,6 +2,8 @@
 using AutoMapper;
 using Fox.Catalog.Configurations.AutoMapper;
 using Fox.Catalog.Extensions;
+using Fox.Catalog.Infrastructure.Interfaces;
+using Fox.Catalog.Infrastructure.Services;
 using Fox.Common.Configurations;
 using Fox.Common.Configurations.RabbitMQ;
 using Fox.Common.Extensions;
@@ -72,8 +74,9 @@ namespace Fox.Catalog
             services.AddSingleton<ILogger>(logger);
 
             services.RegisterRabbitMqService();
+            services.AddSingleton<IRabbitMqService, RabbitMqService>();
 
-            services.Configure<RabbitMQSettings>(
+            services.Configure<RabbitMqSettings>(
                 options =>
                 {
                     options.HostName = "localhost";

@@ -19,7 +19,7 @@ namespace Fox.Common.Extensions
 
         public static void RegisterRabbitMqService(this IServiceCollection services)
         {
-            services.AddSingleton<IRabbitMQContext, RabbitMQContext>();
+            services.AddSingleton<IRabbitMqFactory, RabbitMqFactory>();
         }
 
         public static void RegisterEmailService(this IServiceCollection services, EmailSenderSettings emailSenderSettings)

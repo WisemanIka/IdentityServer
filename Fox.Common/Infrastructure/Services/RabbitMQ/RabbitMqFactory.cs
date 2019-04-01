@@ -9,13 +9,13 @@ using RabbitMQ.Client.Exceptions;
 
 namespace Fox.Common.Infrastructure
 {
-    public class RabbitMQContext : IRabbitMQContext, IDisposable
+    public class RabbitMqFactory : IRabbitMqFactory, IDisposable
     {
         private readonly ConnectionFactory _connectionFactory = null;
         private IConnection _connection;
         private bool _disposed;
 
-        public RabbitMQContext(IOptions<RabbitMQSettings> options)
+        public RabbitMqFactory(IOptions<RabbitMqSettings> options)
         {
             try
             {
@@ -36,7 +36,9 @@ namespace Fox.Common.Infrastructure
                 throw new Exception("RabbitMQ Settings", ex);
             }
         }
+
         public bool IsConnected => _connection != null && _connection.IsOpen && !_disposed;
+
         public bool TryConnect()
         {
 
@@ -90,14 +92,17 @@ namespace Fox.Common.Infrastructure
             Console.WriteLine("A RabbitMQ connection is on shutdown. Trying to re-connect...");
             TryConnect();
         }
+
         public IModel CreateModel()
         {
             if (!IsConnected)
             {
                 throw new InvalidOperationException("No RabbitMQ connections are available to perform this action");
             }
+
             return _connection.CreateModel();
         }
+
         public void Disconnect()
         {
             if (_disposed)
@@ -106,6 +111,7 @@ namespace Fox.Common.Infrastructure
             }
             Dispose();
         }
+
         public void Dispose()
         {
             if (_disposed) return;

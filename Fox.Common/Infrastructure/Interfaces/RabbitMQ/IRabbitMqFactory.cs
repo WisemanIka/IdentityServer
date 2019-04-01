@@ -3,7 +3,7 @@ using RabbitMQ.Client;
 
 namespace Fox.Common.Infrastructure
 {
-    public interface IRabbitMQContext
+    public interface IRabbitMqFactory
     {
         bool TryConnect();
         IModel CreateModel();

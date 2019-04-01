@@ -15,11 +15,13 @@ namespace Fox.Catalog.Infrastructure.Services
     public class ProductService : BaseMongoService, IProductService
     {
         private readonly IProductRepository _productRepository;
+        private readonly IRabbitMqService _rabbitMqService;
 
         public ProductService(ILogger logger, IMongoContext ctx,
-            IProductRepository productRepository) : base(logger, ctx)
+            IProductRepository productRepository, IRabbitMqService rabbitMqService) : base(logger, ctx)
         {
             this._productRepository = productRepository;
+            this._rabbitMqService = rabbitMqService;
         }
 
         private async Task<IEnumerable<ProductResponse>> GetProducts(GetProductRequest filter)
@@ -66,9 +68,12 @@ namespace Fox.Catalog.Infrastructure.Services
             //Rabbit Call Here
             if (isEdit)
             {
-                var revisions = await _productRepository.GetRevision(product?.Id);
-                revisions?.Revisions?.Add(product);
-                await _productRepository.SaveRevision(revisions);
+                //Save Revision with RabbitMQ
+                _rabbitMqService.ProductRevisionSender(product);
+
+                //var revisions = await _productRepository.GetRevision(product?.Id);
+                //revisions?.Revisions?.Add(product);
+                //await _productRepository.SaveRevision(revisions);
             }
 
             result.Model = productDbModel.Map<Products, ProductResponse>();

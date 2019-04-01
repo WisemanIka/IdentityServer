@@ -1,6 +1,6 @@
 ﻿namespace Fox.Common.Configurations.RabbitMQ
 {
-    public class RabbitMQSettings
+    public class RabbitMqSettings
     {
         public string HostName { get; set; }
         public string Username { get; set; }
