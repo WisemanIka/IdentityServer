@@ -18,7 +18,7 @@ namespace RabbitMQ.Consumer.CatalogServices
             this._rabbitMqFactory = rabbitMqFactory;
         }
 
-        public IModel ProductRevisionConsumer()
+        public void ProductRevisionConsumer()
         {
             if (!_rabbitMqFactory.IsConnected)
             {
@@ -34,18 +34,17 @@ namespace RabbitMQ.Consumer.CatalogServices
                 {
                     var body = ea.Body;
                     var message = Encoding.UTF8.GetString(body);
+                    Console.Write(message);
                 };
 
                 channel.BasicConsume(queue: RabbitMqConstants.ProductRevisionQueue, autoAck: true, consumer: consumer);
 
-                channel.CallbackException += (sender, ea) =>
-                {
-                    _consumerChannel.Dispose();
-                    _consumerChannel = ProductRevisionConsumer();
-                };
+                //channel.CallbackException += (sender, ea) =>
+                //{
+                //    _consumerChannel.Dispose();
+                //    _consumerChannel = ProductRevisionConsumer();
+                //};
             }
-
-            return _consumerChannel;
         }
 
         public void Dispose()

@@ -1,11 +1,9 @@
-﻿using System.IO;
-using Fox.Common.Configurations;
+﻿using Fox.Common.Configurations;
 using Fox.Common.Configurations.RabbitMQ;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
 using Fox.Common.Logger;
 using Fox.Common.Providers;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Consumer.CatalogServices;
@@ -16,15 +14,12 @@ namespace RabbitMQ.Consumer
     public class Program
     {
         private static IConfiguration _configuration = null;
-        public static IConfigurationRepository ConfigurationRepository;
 
         public static void Main(string[] args)
         {
-            var appSettingsConfiguration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-            _configuration = appSettingsConfiguration.Build();
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
 
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
@@ -37,9 +32,25 @@ namespace RabbitMQ.Consumer
 
         private static void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = _configuration["MongoConnection:ConnectionString"];
+            var database = _configuration["MongoConnection:Database"];
+
+            services.RegisterCommonServices();
+
+            services.Configure<MongoSettings>(
+                options =>
+                {
+                    options.ConnectionString = connectionString;
+                    options.Database = database;
+                });
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var configurationRepository = serviceProvider.GetService<IConfigurationRepository>();
+
             //Get Environment Configurations
             var environment = _configuration.GetSection("MongoConnection:Environment").Value;
-            var configurationDocument = ConfigurationRepository.ReadConfiguration(environment).Result;
+            var configurationDocument = configurationRepository.ReadConfiguration(environment).Result;
 
             //From Configuration Collection take only Product Configs
             var rabbitConfiguration = configurationDocument.GetAs<ConfigurationDocument>("Product");
@@ -61,19 +72,8 @@ namespace RabbitMQ.Consumer
             services.AddSingleton<ILogger>(logger);
 
             services.RegisterRabbitMqServices();
-            services.AddSingleton<IRabbitMqService, RabbitMqService>();
-
-            services.Configure<RabbitMqSettings>(
-                options =>
-                {
-                    options.HostName = "localhost";
-                    options.Username = "guest";
-                    options.Password = "guest";
-                });
-
-
-            services.RegisterRabbitMqServices();
             services.AddSingleton<ICatalogConsumerService, CatalogConsumerService>();
+
             services.Configure<RabbitMqSettings>(
                 options =>
                 {
@@ -82,7 +82,5 @@ namespace RabbitMQ.Consumer
                     options.Password = "guest";
                 });
         }
-
-
     }
 }
