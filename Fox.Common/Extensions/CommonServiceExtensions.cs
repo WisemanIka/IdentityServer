@@ -17,7 +17,7 @@ namespace Fox.Common.Extensions
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
-        public static void RegisterRabbitMqService(this IServiceCollection services)
+        public static void RegisterRabbitMqServices(this IServiceCollection services)
         {
             services.AddSingleton<IRabbitMqFactory, RabbitMqFactory>();
         }

@@ -1,7 +1,8 @@
-﻿using System;
-using System.Text;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
+﻿using Fox.Common.Configurations.RabbitMQ;
+using Fox.Common.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using RabbitMQ.Consumer.CatalogServices;
+using RabbitMQ.Consumer.Interfaces;
 
 namespace RabbitMQ.Consumer
 {
@@ -9,31 +10,25 @@ namespace RabbitMQ.Consumer
     {
         public static void Main(string[] args)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(queue: "productRevisionQueue",
-                    durable: true,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null);
+            var serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += (model, ea) =>
+            var catalogConsumer = serviceProvider.GetService<ICatalogConsumerService>();
+            catalogConsumer.ProductRevisionConsumer();
+        }
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.RegisterRabbitMqServices();
+            services.AddSingleton<ICatalogConsumerService, CatalogConsumerService>();
+            services.Configure<RabbitMqSettings>(
+                options =>
                 {
-                    var body = ea.Body;
-                    var message = Encoding.UTF8.GetString(body);
-                    Console.WriteLine(" [x] Received {0}", message);
-                };
-
-                channel.BasicConsume(queue: "productRevisionQueue",
-                    autoAck: true,
-                    consumer: consumer);
-
-                Console.WriteLine(" Press [enter] to exit.");
-                Console.ReadLine();
-            }
+                    options.HostName = "localhost";
+                    options.Username = "guest";
+                    options.Password = "guest";
+                });
         }
     }
 }

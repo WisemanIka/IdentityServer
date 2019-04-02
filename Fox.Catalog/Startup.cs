@@ -73,7 +73,7 @@ namespace Fox.Catalog
 
             services.AddSingleton<ILogger>(logger);
 
-            services.RegisterRabbitMqService();
+            services.RegisterRabbitMqServices();
             services.AddSingleton<IRabbitMqService, RabbitMqService>();
 
             services.Configure<RabbitMqSettings>(

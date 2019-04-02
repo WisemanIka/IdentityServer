@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Fox.Catalog.Infrastructure.Interfaces;
 using Fox.Catalog.Models;
 using Fox.Catalog.Models.ViewModels.Product;
+using Fox.Common.Constants;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
 using Fox.Common.Responses;
@@ -69,7 +69,7 @@ namespace Fox.Catalog.Infrastructure.Services
             if (isEdit)
             {
                 //Save Revision with RabbitMQ
-                _rabbitMqService.ProductRevisionSender(product);
+                _rabbitMqService.RabbitMqSender(product, RabbitMqConstants.ProductRevisionQueue);
 
                 //var revisions = await _productRepository.GetRevision(product?.Id);
                 //revisions?.Revisions?.Add(product);

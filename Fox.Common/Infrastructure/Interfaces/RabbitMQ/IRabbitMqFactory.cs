@@ -7,6 +7,7 @@ namespace Fox.Common.Infrastructure
     {
         bool TryConnect();
         IModel CreateModel();
+        bool IsConnected { get; }
         void Disconnect();
         void Dispose();
     }
