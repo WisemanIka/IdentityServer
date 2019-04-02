@@ -2,8 +2,6 @@
 using AutoMapper;
 using Fox.Catalog.Configurations.AutoMapper;
 using Fox.Catalog.Extensions;
-using Fox.Catalog.Infrastructure.Interfaces;
-using Fox.Catalog.Infrastructure.Services;
 using Fox.Common.Configurations;
 using Fox.Common.Configurations.RabbitMQ;
 using Fox.Common.Extensions;
