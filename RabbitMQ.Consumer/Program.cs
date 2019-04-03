@@ -6,8 +6,8 @@ using Fox.Common.Logger;
 using Fox.Common.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RabbitMQ.Consumer.CatalogServices;
-using RabbitMQ.Consumer.Interfaces;
+using RabbitMQ.Consumer.Infrastructure.Interfaces;
+using RabbitMQ.Consumer.Infrastructure.Services;
 
 namespace RabbitMQ.Consumer
 {

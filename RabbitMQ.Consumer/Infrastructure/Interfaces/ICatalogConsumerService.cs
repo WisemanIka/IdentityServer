@@ -1,6 +1,4 @@
-﻿using RabbitMQ.Client;
-
-namespace RabbitMQ.Consumer.Interfaces
+﻿namespace RabbitMQ.Consumer.Infrastructure.Interfaces
 {
     public interface ICatalogConsumerService
     {

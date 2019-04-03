@@ -26,7 +26,8 @@ namespace Fox.Common.Infrastructure
                 {
                     HostName = options.Value.HostName,
                     UserName = options.Value.Username,
-                    Password = options.Value.Password
+                    Password = options.Value.Password,
+                    DispatchConsumersAsync = true
                 };
 
                 if (!IsConnected)

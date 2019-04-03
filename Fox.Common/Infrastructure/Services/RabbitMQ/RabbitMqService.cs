@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 
@@ -14,9 +15,9 @@ namespace Fox.Common.Infrastructure
             this._rabbitMqFactory = rabbitMqFactory;
         }
 
-        public void RabbitMqSender<T>(T model, string queueName)
+        public async Task RabbitMqSender<T>(T model, string queueName)
         {
-            if (_rabbitMqFactory.IsConnected)
+            if (!_rabbitMqFactory.IsConnected)
             {
                 _rabbitMqFactory.TryConnect();
             }
@@ -25,18 +26,17 @@ namespace Fox.Common.Infrastructure
             {
                 channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
 
-                //var properties = channel.CreateBasicProperties();
-                //Additional properties
+                var properties = channel.CreateBasicProperties();
+                properties.DeliveryMode = 2;
 
-                var product = JsonConvert.SerializeObject(model);
-                var body = Encoding.UTF8.GetBytes(product);
-
-                //channel.ConfirmSelect();
-
-                channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
-
-                //channel.WaitForConfirmsOrDie();
+                var revision = JsonConvert.SerializeObject(model);
+                var body = Encoding.UTF8.GetBytes(revision);
+                
+                channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: properties, body: body);
             }
+
+            //TODO Async
+            await Task.Delay(50);
         }
 
         public void Dispose()

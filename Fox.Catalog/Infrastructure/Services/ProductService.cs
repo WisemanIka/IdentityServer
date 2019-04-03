@@ -50,31 +50,19 @@ namespace Fox.Catalog.Infrastructure.Services
 
             if (!result.Succeeded) return result;
 
+            var productDbModel = model.Map<CreateProductRequest, Products>();
+
             var isEdit = !string.IsNullOrWhiteSpace(model.Id);
-
-            Products product = null;
-
             if (isEdit)
             {
-                product = (await _productRepository.GetProducts(new GetProductRequest { Id = model.Id })).SingleOrDefault();
-            }
+                var product = (await _productRepository.GetProducts(new GetProductRequest { Id = model.Id })).SingleOrDefault();
 
-            var productDbModel = isEdit && product != null ?
-                                model.Map<CreateProductRequest, Products>(product) :
-                                model.Map<CreateProductRequest, Products>();
+                var revisionObj = product.GetNonEqualProperties(productDbModel);
+                //Save Revision with RabbitMQ
+                await _rabbitMqService.RabbitMqSender(revisionObj, RabbitMqConstants.ProductRevisionQueue);
+            }
 
             productDbModel = await _productRepository.Save(productDbModel);
-            
-            //Rabbit Call Here
-            if (isEdit)
-            {
-                //Save Revision with RabbitMQ
-                _rabbitMqService.RabbitMqSender(product, RabbitMqConstants.ProductRevisionQueue);
-
-                //var revisions = await _productRepository.GetRevision(product?.Id);
-                //revisions?.Revisions?.Add(product);
-                //await _productRepository.SaveRevision(revisions);
-            }
 
             result.Model = productDbModel.Map<Products, ProductResponse>();
 
