@@ -8,6 +8,7 @@ using Fox.Catalog.Models.ViewModels.Product;
 using Fox.Common.Constants;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
+using Fox.Common.Models;
 using Fox.Common.Responses;
 
 namespace Fox.Catalog.Infrastructure.Services
@@ -55,11 +56,12 @@ namespace Fox.Catalog.Infrastructure.Services
             var isEdit = !string.IsNullOrWhiteSpace(model.Id);
             if (isEdit)
             {
-                var product = (await _productRepository.GetProducts(new GetProductRequest { Id = model.Id })).SingleOrDefault();
+                var product = (await _productRepository.GetProducts(new GetProductRequest { Id = model.Id })).Single();
 
-                var revisionObj = product.GetNonEqualProperties(productDbModel);
+                var revision = product.GetRevisionProperties(productDbModel);
+
                 //Save Revision with RabbitMQ
-                await _rabbitMqService.RabbitMqSender(revisionObj, RabbitMqConstants.ProductRevisionQueue);
+                await _rabbitMqService.RabbitMqSender(revision, RabbitMqConstants.ProductRevisionQueue);
             }
 
             productDbModel = await _productRepository.Save(productDbModel);

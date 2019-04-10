@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using Fox.Common.Extensions;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 
@@ -29,9 +30,13 @@ namespace Fox.Common.Infrastructure
                 var properties = channel.CreateBasicProperties();
                 properties.DeliveryMode = 2;
 
-                var revision = JsonConvert.SerializeObject(model);
+                var settings = new JsonSerializerSettings();
+                settings.Converters.Add(new KvpConverter());
+                settings.Formatting = Formatting.Indented;
+
+                var revision = JsonConvert.SerializeObject(model, settings);
                 var body = Encoding.UTF8.GetBytes(revision);
-                
+
                 channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: properties, body: body);
             }
 

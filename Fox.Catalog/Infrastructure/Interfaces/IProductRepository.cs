@@ -10,7 +10,7 @@ namespace Fox.Catalog.Infrastructure.Interfaces
         Task<List<Products>> GetProducts(GetProductRequest filter);
         Task<Products> Save(Products model);
         Task<bool> Delete(string id);
-        Task<ProductRevisions> GetRevision(string id);
-        Task SaveRevision(ProductRevisions revision);
+        //Task<ProductRevisions> GetRevision(string id);
+        //Task SaveRevision(ProductRevisions revision);
     }
 }
