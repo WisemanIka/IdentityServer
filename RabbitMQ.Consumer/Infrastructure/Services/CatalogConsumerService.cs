@@ -53,8 +53,6 @@ namespace RabbitMQ.Consumer.Infrastructure.Services
             var revision = JsonConvert.DeserializeObject<ProductRevisions>(message);
 
             await _context.GetCollection<ProductRevisions>().InsertOneAsync(revision);
-
-            await Task.Delay(50);
         }
 
         public void Dispose()

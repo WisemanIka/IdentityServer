@@ -42,7 +42,6 @@ namespace Fox.Common.Infrastructure
         }
         public bool TryConnect()
         {
-
             try
             {
                 //Logger.LogMessage("RabbitMQ Client is trying to connect", "RabbitMQ");
@@ -64,11 +63,9 @@ namespace Fox.Common.Infrastructure
                 //Logger.LogMessage($"RabbitMQ persistent connection acquired a connection {_connection.Endpoint.HostName} and is subscribed to failure events", "RabbitMQ");
                 return true;
             }
-            else
-            {
-                //Logger.LogMessage($"FATAL ERROR: RabbitMQ connections could not be created and opened", "RabbitMQ", LogLevels.Error);
-                return false;
-            }
+
+            //Logger.LogMessage($"FATAL ERROR: RabbitMQ connections could not be created and opened", "RabbitMQ", LogLevels.Error);
+            return false;
 
         }
         private void OnConnectionBlocked(object sender, ConnectionBlockedEventArgs e)
