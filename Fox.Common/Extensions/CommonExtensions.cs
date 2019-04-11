@@ -16,7 +16,7 @@ namespace Fox.Common.Extensions
             var result = new RevisionModel
             {
                 Id = string.Empty,
-                Properties = new List<KeyValuePair<string, object>>()
+                Properties = new Dictionary<string, object>(),
             };
 
             var flags = BindingFlags.Public | BindingFlags.Instance;
@@ -62,7 +62,7 @@ namespace Fox.Common.Extensions
                 if (!sourcePropertyValue.Equals(destPropertyValue))
                 {
                     //result.Properties.Add(new DictionaryModel { Key = property.Name, Value = sourcePropertyValue.ToString() });
-                    result.Properties.Add(new KeyValuePair<string, object>(property.Name, sourcePropertyValue.ToString()));
+                    result.Properties[property.Name] = sourcePropertyValue.ToString();
                 }
             }
 

@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Fox.Common.Constants;
 using Fox.Common.Infrastructure;
-using Fox.Common.Models;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Newtonsoft.Json;
@@ -54,26 +53,26 @@ namespace RabbitMQ.Consumer.Infrastructure.Services
         {
             var body = ea.Body;
             var message = Encoding.UTF8.GetString(body);
-            var revision = JsonConvert.DeserializeObject(message);
+            var revision = JsonConvert.DeserializeObject<Test>(message);
 
-            //var revisionData = await GetProductRevisions(revision.Id);
+            var revisionData = await GetProductRevisions(revision.Id);
 
-            //if (!string.IsNullOrEmpty(revisionData?.Id))
-            //{
-            //    revisionData.Revisions = revision.Properties;
-            //    await _context.GetCollection<ProductRevisions>().ReplaceOneAsync(revision.Id, revisionData);
-            //}
-            //else
-            //{
-            //    var productRevision = new ProductRevisions
-            //    {
-            //        Id = revision.Id,
-            //        CreatedAt = DateTime.UtcNow,
-            //        Revisions = revision.Properties
-            //    };
+            if (!string.IsNullOrEmpty(revisionData?.Id))
+            {
+                revisionData.Revisions.Add(revision.Properties);
+                await _context.GetCollection<ProductRevisions>().ReplaceOneAsync(revision.Id, revisionData);
+            }
+            else
+            {
+                var productRevision = new ProductRevisions
+                {
+                    Id = revision.Id,
+                    CreatedAt = DateTime.UtcNow,
+                    Revisions = new List<object> { revision.Properties }
+                };
 
-            //    await _context.GetCollection<ProductRevisions>().InsertOneAsync(productRevision);
-            //}
+                await _context.GetCollection<Test>().InsertOneAsync(revision);
+            }
         }
 
         private async Task<ProductRevisions> GetProductRevisions(string revisionId)

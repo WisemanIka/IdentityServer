@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fox.Catalog.Infrastructure.Interfaces;
@@ -8,7 +7,6 @@ using Fox.Catalog.Models.ViewModels.Product;
 using Fox.Common.Constants;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
-using Fox.Common.Models;
 using Fox.Common.Responses;
 
 namespace Fox.Catalog.Infrastructure.Services
@@ -57,11 +55,8 @@ namespace Fox.Catalog.Infrastructure.Services
             if (isEdit)
             {
                 var product = (await _productRepository.GetProducts(new GetProductRequest { Id = model.Id })).Single();
-
-                var revision = product.GetRevisionProperties(productDbModel);
-
                 //Save Revision with RabbitMQ
-                await _rabbitMqService.RabbitMqSender(revision, RabbitMqConstants.ProductRevisionQueue);
+                await _rabbitMqService.RabbitMqSender(product, RabbitMqConstants.ProductRevisionQueue);
             }
 
             productDbModel = await _productRepository.Save(productDbModel);

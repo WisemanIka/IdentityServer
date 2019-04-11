@@ -5,6 +5,6 @@ namespace Fox.Common.Models
     public class RevisionModel
     {
         public string Id { get; set; }
-        public List<KeyValuePair<string, object>> Properties { get; set; }
+        public Dictionary<string, object> Properties { get; set; }
     }
 }

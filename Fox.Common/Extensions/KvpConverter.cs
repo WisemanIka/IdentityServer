@@ -8,15 +8,19 @@ namespace Fox.Common.Extensions
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(KeyValuePair<string, object>);
+            return objectType == typeof(Dictionary<string, object>);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var kvp = (KeyValuePair<string, object>)value;
+            var dictionary = (Dictionary<string, object>)value;
             writer.WriteStartObject();
-            writer.WritePropertyName(kvp.Key);
-            serializer.Serialize(writer, kvp.Value);
+            foreach (var dic in dictionary)
+            {
+                writer.WritePropertyName(dic.Key);
+                serializer.Serialize(writer, dic.Value);
+            }
+
             writer.WriteEndObject();
         }
 
