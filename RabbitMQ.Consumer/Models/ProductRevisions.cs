@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using Fox.Common.Models;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RabbitMQ.Consumer.Models
 {
     public class ProductRevisions
     {
         public string Id { get; set; }
-        public List<RevisionModel> Revisions { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public List<object> Revisions { get; set; }
     }
 }

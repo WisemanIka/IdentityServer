@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Fox.Common.Constants;
 using Fox.Common.Infrastructure;
+using Fox.Common.Models;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -50,9 +54,33 @@ namespace RabbitMQ.Consumer.Infrastructure.Services
         {
             var body = ea.Body;
             var message = Encoding.UTF8.GetString(body);
-            var revision = JsonConvert.DeserializeObject<ProductRevisions>(message);
+            var revision = JsonConvert.DeserializeObject(message);
 
-            await _context.GetCollection<ProductRevisions>().InsertOneAsync(revision);
+            //var revisionData = await GetProductRevisions(revision.Id);
+
+            //if (!string.IsNullOrEmpty(revisionData?.Id))
+            //{
+            //    revisionData.Revisions = revision.Properties;
+            //    await _context.GetCollection<ProductRevisions>().ReplaceOneAsync(revision.Id, revisionData);
+            //}
+            //else
+            //{
+            //    var productRevision = new ProductRevisions
+            //    {
+            //        Id = revision.Id,
+            //        CreatedAt = DateTime.UtcNow,
+            //        Revisions = revision.Properties
+            //    };
+
+            //    await _context.GetCollection<ProductRevisions>().InsertOneAsync(productRevision);
+            //}
+        }
+
+        private async Task<ProductRevisions> GetProductRevisions(string revisionId)
+        {
+            var query = _context.GetCollection<ProductRevisions>().AsQueryable();
+            var revision = await query.Where(x => x.Id == revisionId).SingleOrDefaultAsync();
+            return revision;
         }
 
         public void Dispose()
