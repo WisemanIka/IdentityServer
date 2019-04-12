@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Fox.Common.Constants;
+using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -51,34 +52,43 @@ namespace RabbitMQ.Consumer.Infrastructure.Services
 
         private async Task SaveProductRevision(object model, BasicDeliverEventArgs ea)
         {
-            var body = ea.Body;
-            var message = Encoding.UTF8.GetString(body);
-            var revision = JsonConvert.DeserializeObject<Test>(message);
-
-            var revisionData = await GetProductRevisions(revision.Id);
-
-            if (!string.IsNullOrEmpty(revisionData?.Id))
+            try
             {
-                revisionData.Revisions.Add(revision.Properties);
-                await _context.GetCollection<ProductRevisions>().ReplaceOneAsync(revision.Id, revisionData);
-            }
-            else
-            {
-                var productRevision = new ProductRevisions
+                var body = ea.Body;
+                var message = Encoding.UTF8.GetString(body);
+                var response = JsonConvert.DeserializeObject<ProductResponse>(message);
+
+                var revisionData = await GetProductRevisions(response.Id);
+
+                var product = response.Map<ProductResponse, Products>();
+
+                if (!string.IsNullOrEmpty(revisionData?.Id))
                 {
-                    Id = revision.Id,
-                    CreatedAt = DateTime.UtcNow,
-                    Revisions = new List<object> { revision.Properties }
-                };
+                    revisionData.Revisions.Add(product);
+                    await _context.GetCollection<ProductRevisions>().ReplaceOneAsync(r => r.Id == response.Id, revisionData);
+                }
+                else
+                {
+                    var productRevision = new ProductRevisions
+                    {
+                        Id = response.Id,
+                        Revisions = new List<Products> { product }
+                    };
 
-                await _context.GetCollection<Test>().InsertOneAsync(revision);
+                    await _context.GetCollection<ProductRevisions>().InsertOneAsync(productRevision);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
             }
         }
 
         private async Task<ProductRevisions> GetProductRevisions(string revisionId)
         {
             var query = _context.GetCollection<ProductRevisions>().AsQueryable();
-            var revision = await query.Where(x => x.Id == revisionId).SingleOrDefaultAsync();
+            var revision = await query.Where(x => x.Id.Equals(revisionId)).SingleOrDefaultAsync();
             return revision;
         }
 

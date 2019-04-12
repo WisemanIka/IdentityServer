@@ -1,4 +1,6 @@
-﻿using Fox.Common.Configurations;
+﻿using System.Reflection;
+using AutoMapper;
+using Fox.Common.Configurations;
 using Fox.Common.Configurations.RabbitMQ;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
@@ -6,6 +8,7 @@ using Fox.Common.Logger;
 using Fox.Common.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RabbitMQ.Consumer.Configurations.AutoMapper;
 using RabbitMQ.Consumer.Infrastructure.Interfaces;
 using RabbitMQ.Consumer.Infrastructure.Services;
 
@@ -36,6 +39,9 @@ namespace RabbitMQ.Consumer
             var database = _configuration["MongoConnection:Database"];
 
             services.RegisterCommonServices();
+
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(ProductMapping)));
+            Mapper.AssertConfigurationIsValid();
 
             services.Configure<MongoSettings>(
                 options =>

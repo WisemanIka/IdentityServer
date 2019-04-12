@@ -49,17 +49,19 @@ namespace Fox.Catalog.Infrastructure.Services
 
             if (!result.Succeeded) return result;
 
-            var productDbModel = model.Map<CreateProductRequest, Products>();
+            Products product = null;
 
-            var isEdit = !string.IsNullOrWhiteSpace(model.Id);
-            if (isEdit)
+            if (!string.IsNullOrWhiteSpace(model.Id))
             {
-                var product = (await _productRepository.GetProducts(new GetProductRequest { Id = model.Id })).Single();
-                //Save Revision with RabbitMQ
-                await _rabbitMqService.RabbitMqSender(product, RabbitMqConstants.ProductRevisionQueue);
+                product = (await _productRepository.GetProducts(new GetProductRequest { Id = model.Id })).Single();
             }
 
+            var productDbModel = model.Map<CreateProductRequest, Products>(product);
+
             productDbModel = await _productRepository.Save(productDbModel);
+
+            //Save Revision with RabbitMQ
+            await _rabbitMqService.RabbitMqSender(product, RabbitMqConstants.ProductRevisionQueue);
 
             result.Model = productDbModel.Map<Products, ProductResponse>();
 
@@ -71,8 +73,19 @@ namespace Fox.Catalog.Infrastructure.Services
             if (string.IsNullOrEmpty(id))
                 return false;
 
-            var result = await _productRepository.Delete(id);
-            return result;
+            var product = (await _productRepository.GetProducts(new GetProductRequest { Id = id })).SingleOrDefault();
+
+            if (product == null)
+                return false;
+
+            product.IsDeleted = true;
+
+            product = await _productRepository.Save(product);
+
+            //Save Revision with RabbitMQ
+            await _rabbitMqService.RabbitMqSender(product, RabbitMqConstants.ProductRevisionQueue);
+
+            return true;
         }
     }
 }

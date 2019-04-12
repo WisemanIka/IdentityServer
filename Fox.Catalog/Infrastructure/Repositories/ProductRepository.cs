@@ -94,32 +94,5 @@ namespace Fox.Catalog.Infrastructure.Repositories
 
             return model;
         }
-
-        //public async Task<ProductRevisions> GetRevision(string id)
-        //{
-        //    var revision = _ctx.GetCollection<ProductRevisions>()
-        //        .AsQueryable()
-        //        .Where(x => x.Id == id);
-
-        //    return await revision.SingleOrDefaultAsync();
-        //}
-
-        //public async Task SaveRevision(ProductRevisions revision)
-        //{
-        //    await _ctx.GetCollection<ProductRevisions>().InsertOneAsync(revision);
-        //}
-
-        public async Task<bool> Delete(string id)
-        {
-            var product = (await GetProducts(new GetProductRequest { Id = id })).Single();
-
-            if (product == null)
-                return false;
-
-            //product.IsDeleted = true;
-            await Save(product);
-
-            return true;
-        }
     }
 }
