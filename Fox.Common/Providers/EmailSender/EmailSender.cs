@@ -6,34 +6,32 @@ namespace Fox.Common.Providers.EmailSender
 {
     public class EmailSender : IEmailSender
     {
+        private readonly string _host;
+        private readonly int _port;
+        private readonly bool _enableSsl;
+        private readonly string _userName;
+        private readonly string _password;
 
-        // Our private configuration variables
-        private string host;
-        private int port;
-        private bool enableSSL;
-        private string userName;
-        private string password;
-
-        // Get our parameterized configuration
         public EmailSender(string host, int port, bool enableSSL, string userName, string password)
         {
-            this.host = host;
-            this.port = port;
-            this.enableSSL = enableSSL;
-            this.userName = userName;
-            this.password = password;
+            this._host = host;
+            this._port = port;
+            this._enableSsl = enableSSL;
+            this._userName = userName;
+            this._password = password;
         }
 
-        // Use our configuration to send the email by using SmtpClient
+        // Configuration to Send the Email by Using SmtpClient
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var client = new SmtpClient(host, port)
+            var client = new SmtpClient(_host, _port)
             {
-                Credentials = new NetworkCredential(userName, password),
-                EnableSsl = enableSSL
+                Credentials = new NetworkCredential(_userName, _password),
+                EnableSsl = _enableSsl
             };
+
             return client.SendMailAsync(
-                new MailMessage(userName, email, subject, htmlMessage) { IsBodyHtml = true }
+                new MailMessage(_userName, email, subject, htmlMessage) { IsBodyHtml = true }
             );
         }
     }

@@ -18,15 +18,13 @@ namespace IdentityServer.Infrastructure
     public class AccountService : BaseService, IAccountService
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
 
-        public AccountService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IEmailSender emailSender,
+        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender,
             ILogger logger, IdentityContext ctx) : base(logger, ctx)
         {
             this._userManager = userManager;
-            this._roleManager = roleManager;
             this._signInManager = signInManager;
             this._emailSender = emailSender;
         }

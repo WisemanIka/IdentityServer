@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fox.Catalog.Infrastructure.Interfaces;
@@ -79,12 +80,10 @@ namespace Fox.Catalog.Infrastructure.Services
                 return false;
 
             product.IsDeleted = true;
+            product.CreatedAt = DateTime.UtcNow;
 
-            product = await _productRepository.Save(product);
-
-            //Save Revision with RabbitMQ
-            await _rabbitMqService.RabbitMqSender(product, RabbitMqConstants.ProductRevisionQueue);
-
+            await _productRepository.Save(product);
+            
             return true;
         }
     }

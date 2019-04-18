@@ -42,6 +42,7 @@ namespace IdentityServer.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Login([FromBody]LoginRequest request)
@@ -58,6 +59,7 @@ namespace IdentityServer.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("CheckEmail")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CheckEmail(string email)
@@ -77,6 +79,7 @@ namespace IdentityServer.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("ConfirmEmail")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
