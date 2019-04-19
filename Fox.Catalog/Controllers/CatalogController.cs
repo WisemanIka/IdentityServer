@@ -7,13 +7,12 @@ using Fox.Catalog.Models.ViewModels.Product;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
 using Fox.Common.Responses;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fox.Catalog.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
-    [ApiController]
     [ValidationModel]
     //[Authorize]
     public class CatalogController : ControllerBase

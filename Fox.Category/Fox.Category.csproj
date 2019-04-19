@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <UserSecretsId>1072fa7b-0d93-4848-a7ef-a58d1cda7de0</UserSecretsId>
+    <UserSecretsId>d0954ea0-e12e-4c5d-8bd1-c628d1908e92</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,12 +11,11 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="MongoDB.Driver" Version="2.8.0" />
     <PackageReference Include="NEST" Version="6.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="protobuf-net" Version="2.4.0" />
-    <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
