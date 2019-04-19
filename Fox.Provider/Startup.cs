@@ -1,13 +1,11 @@
 ﻿using System.Reflection;
 using AutoMapper;
-using Fox.Catalog.Configurations.AutoMapper;
-using Fox.Catalog.Extensions;
 using Fox.Common.Configurations;
-using Fox.Common.Configurations.RabbitMQ;
-using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
 using Fox.Common.Logger;
 using Fox.Common.Providers;
+using Fox.Provider.Configurations.AutoMapper;
+using Fox.Provider.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace Fox.Catalog
+namespace Fox.Provider
 {
     public class Startup
     {
@@ -32,7 +30,7 @@ namespace Fox.Catalog
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CatalogCorsPolicy",
+                options.AddPolicy("ProviderCorsPolicy",
                     builder => builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
@@ -41,7 +39,7 @@ namespace Fox.Catalog
 
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
-            services.AddAutoMapper(Assembly.GetAssembly(typeof(ProductMapping)));
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(ProviderMapping)));
             Mapper.AssertConfigurationIsValid();
 
             //Register Custom Services
@@ -52,8 +50,8 @@ namespace Fox.Catalog
             var environment = Configuration.GetSection("MongoConnection:Environment").Value;
             var configurationDocument = ConfigurationRepository.ReadConfiguration(environment).Result;
 
-            //From Configuration Collection take only Product Configs
-            var dbConfiguration = configurationDocument.GetAs<ConfigurationDocument>("Product");
+            //From Configuration Collection take only Provider Configs
+            var dbConfiguration = configurationDocument.GetAs<ConfigurationDocument>("Providers");
 
             var connectionString = dbConfiguration.GetAs<string>("ConnectionString");
             var databaseName = dbConfiguration.GetAs<string>("Database");
@@ -71,20 +69,9 @@ namespace Fox.Catalog
 
             services.AddSingleton<ILogger>(logger);
 
-            services.RegisterRabbitMqServices();
-            services.AddSingleton<IRabbitMqService, RabbitMqService>();
-
-            services.Configure<RabbitMqSettings>(
-                options =>
-                {
-                    options.HostName = "localhost";
-                    options.Username = "guest";
-                    options.Password = "guest";
-                });
-
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Catalog Api", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "Provider Api", Version = "v1" });
             });
         }
 
@@ -100,7 +87,7 @@ namespace Fox.Catalog
                 app.UseHsts();
             }
 
-            app.UseCors("CatalogCorsPolicy");
+            app.UseCors("ProviderCorsPolicy");
 
             app.UseAuthentication();
 
@@ -110,7 +97,7 @@ namespace Fox.Catalog
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Catalog Api V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Provider Api V1");
             });
         }
     }

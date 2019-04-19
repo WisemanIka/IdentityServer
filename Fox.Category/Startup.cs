@@ -51,19 +51,19 @@ namespace Fox.Category
             var configurationDocument = ConfigurationRepository.ReadConfiguration(environment).Result;
 
             //From Configuration Collection take only Category Configs
-            var productConfiguration = configurationDocument.GetAs<ConfigurationDocument>("Category");
+            var dbConfiguration = configurationDocument.GetAs<ConfigurationDocument>("Category");
 
-            var productConnectionString = productConfiguration.GetAs<string>("ConnectionString");
-            var productDatabase = productConfiguration.GetAs<string>("Database");
+            var connectionString = dbConfiguration.GetAs<string>("ConnectionString");
+            var databaseName = dbConfiguration.GetAs<string>("Database");
 
             services.Configure<MongoSettings>(
                 options =>
                 {
-                    options.ConnectionString = productConnectionString;
-                    options.Database = productDatabase;
+                    options.ConnectionString = connectionString;
+                    options.Database = databaseName;
                 });
 
-            var elasticSearchIndex = productConfiguration.GetAs<string>("ElasticSearchIndex");
+            var elasticSearchIndex = dbConfiguration.GetAs<string>("ElasticSearchIndex");
             var elasticSearchProvider = new ElasticSearchProvider(configurationDocument, elasticSearchIndex);
             var logger = new Logger(elasticSearchProvider);
 
