@@ -66,5 +66,21 @@ namespace Fox.Category.Infrastructure.Repositories
             var result = await query.ToListAsync();
             return result;
         }
+
+        public async Task<Categories> Save(Categories model)
+        {
+            var isCreate = string.IsNullOrEmpty(model.Id);
+
+            if (isCreate)
+            {
+                await _ctx.GetCollection<Categories>().InsertOneAsync(model);
+            }
+            else
+            {
+                await _ctx.GetCollection<Categories>().ReplaceOneAsync(r => r.Id == model.Id, model);
+            }
+
+            return model;
+        }
     }
 }

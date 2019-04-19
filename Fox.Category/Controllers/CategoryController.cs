@@ -4,7 +4,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Fox.Category.Infrastructure.Interfaces;
 using Fox.Category.Models.ViewModels.Category;
+using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
+using Fox.Common.Models;
 using Fox.Common.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,7 +56,58 @@ namespace Fox.Category.Controllers
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Fox.Catalog.Api");
+                Logger.LogException(ex, "Fox.Category.Api");
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("Dictionary")]
+        [ProducesResponseType(typeof(List<SimpleDictionary>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAsDictionary(GetCategoryRequest filter)
+        {
+            try
+            {
+                var categories = await CategoryService.GetAsDictionary(filter);
+                return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Fox.Category.Api");
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost("Save")]
+        [ProducesResponseType(typeof(ValidationResultModel<CategoryResponse>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Save([FromBody]CreateCategoryRequest request)
+        {
+            try
+            {
+                request.UserId = User.GetUserId();
+
+                var result = await CategoryService.Save(request);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Fox.Category.Api");
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpDelete("Delete/{id}")]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                var result = await CategoryService.Delete(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Fox.Category.Api");
                 return BadRequest(ex);
             }
         }

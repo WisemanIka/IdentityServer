@@ -8,7 +8,6 @@ namespace Fox.Category.Infrastructure.Interfaces
     public interface ICategoryRepository
     {
         Task<List<Categories>> GetCategories(GetCategoryRequest filter);
-        //Task<Categories> Save(Categories model);
-        //Task<bool> Delete(string id);
+        Task<Categories> Save(Categories model);
     }
 }
