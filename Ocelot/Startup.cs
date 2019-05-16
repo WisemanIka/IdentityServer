@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,19 +22,15 @@ namespace Ocelot.Gateway
         {
             var key = "IdentityServiceApiKey";
 
-            services.AddAuthentication(o =>
-                {
-                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            services.AddAuthentication()
                 .AddIdentityServerAuthentication(key, options =>
                 {
                     options.Authority = "http://localhost:8080";
-                    options.RequireHttpsMetadata = false;
                     options.ApiName = "ocelot";
+                    options.RequireHttpsMetadata = false;
                 });
 
-            services.AddOcelot(Configuration);
+            services.AddOcelot();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

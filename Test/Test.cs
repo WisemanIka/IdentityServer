@@ -31,9 +31,9 @@ namespace Test
             var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = discover.TokenEndpoint,
-                ClientId = "Angular",
-                ClientSecret = "c0359956-eb75-480b-adde-2c33de5f3900",
-                Scope = "basket"
+                ClientId = "Postman",
+                ClientSecret = "secret",
+                Scope = "ocelot"
             });
 
             if (tokenResponse.IsError)

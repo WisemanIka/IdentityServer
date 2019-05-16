@@ -10,7 +10,7 @@
         }
       ],
       "UpstreamPathTemplate": "/basket",
-      "UpstreamHttpMethod": [],
+      "UpstreamHttpMethod": [ "Get", "Post" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "IdentityServiceApiKey",
         "AllowedScopes": []

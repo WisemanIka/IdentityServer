@@ -102,7 +102,7 @@ namespace Fox.Catalog
 
             app.UseCors("CatalogCorsPolicy");
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
             app.UseMvc();
 

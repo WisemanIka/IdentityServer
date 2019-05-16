@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fox.BasketApi.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class BasketController : ControllerBase
     {
         [HttpGet]

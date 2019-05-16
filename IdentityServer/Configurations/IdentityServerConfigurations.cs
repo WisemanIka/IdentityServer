@@ -42,7 +42,10 @@ namespace IdentityServer.Configurations
                         new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
                     },
                     AllowedScopes = {
-                        "basket"
+                        "ocelot",
+                        "basket",
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
                     }
                 },
                 new Client
@@ -59,10 +62,7 @@ namespace IdentityServer.Configurations
                         new Secret("secret".Sha256())
                     },
                     AllowedScopes = {
-                        "ocelot",
-                        "basket",
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
+                        "ocelot"
                     }
                 }
             };
