@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fox.BasketApi.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     public class BasketController : ControllerBase
     {
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Get()
         {
             var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToArray();
