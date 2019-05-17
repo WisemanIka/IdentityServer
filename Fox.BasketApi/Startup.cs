@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Fox.BasketApi
 {
@@ -13,21 +15,28 @@ namespace Fox.BasketApi
         {
             services.AddMvcCore()
                 .AddAuthorization()
-                .AddJsonFormatters();
+                .AddJsonFormatters()
+                .AddApiExplorer()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-            services.AddAuthentication(o =>
+            services.AddAuthentication(options =>
                 {
-                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddIdentityServerAuthentication(options =>
                 {
+                    options.ApiName = "basket";
+                    options.ApiSecret = "test";
                     options.Authority = "http://localhost:8080";
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = "basket";
                 });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Basket Api", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +51,12 @@ namespace Fox.BasketApi
 
             app.UseMvcWithDefaultRoute();
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Basket Api V1");
+            });
         }
     }
 }

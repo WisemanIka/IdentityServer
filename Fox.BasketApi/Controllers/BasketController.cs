@@ -9,7 +9,6 @@ namespace Fox.BasketApi.Controllers
     public class BasketController : ControllerBase
     {
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Get()
         {
             var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToArray();

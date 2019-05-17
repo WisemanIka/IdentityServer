@@ -1,6 +1,5 @@
 ﻿using IdentityServer4.Models;
 using System.Collections.Generic;
-using IdentityServer4;
 
 namespace IdentityServer.Configurations
 {
@@ -10,8 +9,7 @@ namespace IdentityServer.Configurations
         {
             return new IdentityResource[]
             {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.OpenId()
             };
         }
 
@@ -20,7 +18,7 @@ namespace IdentityServer.Configurations
             return new ApiResource[]
             {
                 new ApiResource("ocelot", "API Gateway"),
-                new ApiResource("basket", "Basket API Desc")
+                new ApiResource("basket", "Basket API Desc")  { ApiSecrets = { new Secret("test".Sha256()) } }
             };
         }
 
@@ -42,10 +40,7 @@ namespace IdentityServer.Configurations
                         new Secret("c0359956-eb75-480b-adde-2c33de5f3900".Sha256())
                     },
                     AllowedScopes = {
-                        "ocelot",
-                        "basket",
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
+                        "ocelot"
                     }
                 },
                 new Client

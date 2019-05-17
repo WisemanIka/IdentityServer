@@ -10,11 +10,36 @@
         }
       ],
       "UpstreamPathTemplate": "/basket",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "IdentityServiceApiKey",
-        "AllowedScopes": []
-      }
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+      //,
+      //"AuthenticationOptions": {
+      //  "AuthenticationProviderKey": "IdentityServiceApiKey",
+      //  "AllowedScopes": []
+      //}
+    },
+    {
+      "DownstreamPathTemplate": "/api/Catalog/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/product/{catchAll}",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Category/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8082
+        }
+      ],
+      "UpstreamPathTemplate": "/category/{catchAll}",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
     }
   ],
   "GlobalConfiguration": {
