@@ -144,8 +144,8 @@ namespace IdentityServer.Infrastructure
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = identityClaims,
+                SigningCredentials = credentials,
                 Expires = DateTime.UtcNow.AddMinutes(5),
-                SigningCredentials = credentials
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

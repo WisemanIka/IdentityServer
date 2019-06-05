@@ -1,21 +1,16 @@
 {
   "ReRoutes": [
     {
-      "DownstreamPathTemplate": "/api/Basket",
+      "DownstreamPathTemplate": "/api/Account/{catchAll}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 8085
+          "Port": 8080
         }
       ],
-      "UpstreamPathTemplate": "/basket",
-      "UpstreamHttpMethod": [ "Get", "Post" ]
-      //,
-      //"AuthenticationOptions": {
-      //  "AuthenticationProviderKey": "IdentityServiceApiKey",
-      //  "AllowedScopes": []
-      //}
+      "UpstreamPathTemplate": "/account/{catchAll}",
+      "UpstreamHttpMethod": []
     },
     {
       "DownstreamPathTemplate": "/api/Catalog/{catchAll}",
@@ -27,7 +22,7 @@
         }
       ],
       "UpstreamPathTemplate": "/product/{catchAll}",
-      "UpstreamHttpMethod": [ "Get", "Post" ]
+      "UpstreamHttpMethod": []
     },
     {
       "DownstreamPathTemplate": "/api/Category/{catchAll}",
@@ -39,8 +34,49 @@
         }
       ],
       "UpstreamPathTemplate": "/category/{catchAll}",
-      "UpstreamHttpMethod": [ "Get", "Post" ]
+      "UpstreamHttpMethod": []
+    },
+    {
+      "DownstreamPathTemplate": "/api/Menu/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8082
+        }
+      ],
+      "UpstreamPathTemplate": "/menu/{catchAll}",
+      "UpstreamHttpMethod": []
+    },
+    {
+      "DownstreamPathTemplate": "/api/Provider/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8083
+        }
+      ],
+      "UpstreamPathTemplate": "/provider/{catchAll}",
+      "UpstreamHttpMethod": []
     }
+    //{
+    //  "DownstreamPathTemplate": "/api/Provider",
+    //  "DownstreamScheme": "http",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 8085
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/provider",
+    //  "UpstreamHttpMethod": []
+    //  //,
+    //  //"AuthenticationOptions": {
+    //  //  "AuthenticationProviderKey": "IdentityServiceApiKey",
+    //  //  "AllowedScopes": []
+    //  //}
+    //}
   ],
   "GlobalConfiguration": {
 

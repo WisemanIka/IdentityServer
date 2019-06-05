@@ -11,6 +11,9 @@ namespace Fox.Category.Extensions
         {
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+
+            services.AddScoped<IMenuService, MenuService>();
         }
     }
 }
