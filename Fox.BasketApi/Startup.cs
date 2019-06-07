@@ -54,6 +54,12 @@ namespace Fox.BasketApi
             //From Configuration Collection take only Product Configs
             var dbConfiguration = configurationDocument.GetAs<ConfigurationDocument>("Basket");
 
+            services.AddDistributedRedisCache(option =>
+            {
+                option.Configuration = "127.0.0.1";
+                option.InstanceName = "master";
+            });
+
 
             var elasticSearchIndex = dbConfiguration.GetAs<string>("ElasticSearchIndex");
             var elasticSearchProvider = new ElasticSearchProvider(configurationDocument, elasticSearchIndex);
