@@ -2,7 +2,6 @@
 using Fox.BasketApi.Models;
 using Fox.BasketApi.Models.ViewModels.Basket;
 using Fox.Common.Extensions;
-using System;
 
 namespace Fox.BasketApi.Configurations.AutoMapper
 {

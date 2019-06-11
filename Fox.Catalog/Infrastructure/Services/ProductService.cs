@@ -31,9 +31,9 @@ namespace Fox.Catalog.Infrastructure.Services
             return result;
         }
 
-        public async Task<List<ProductResponse>> GetAll(GetProductRequest filter)
+        public async Task<List<ProductResponse>> GetAll(GetProductRequest request)
         {
-            var result = (await GetProducts(filter)).ToList();
+            var result = (await GetProducts(request)).ToList();
             return result;
         }
 

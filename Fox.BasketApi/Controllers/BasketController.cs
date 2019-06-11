@@ -5,7 +5,6 @@ using Fox.BasketApi.Infrastructure.Interfaces;
 using Fox.BasketApi.Models.ViewModels.Basket;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fox.BasketApi.Controllers
@@ -33,7 +32,7 @@ namespace Fox.BasketApi.Controllers
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Fox.Catalog.Api");
+                Logger.LogException(ex, "Fox.Basket.Api");
                 return BadRequest(ex);
             }
         }
