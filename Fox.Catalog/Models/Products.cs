@@ -8,6 +8,7 @@ namespace Fox.Catalog.Models
         public List<string> CategoryId { get; set; }
         public string ProviderId { get; set; }
         public string Name { get; set; }
+        public string ShortDescription { get; set; }
         public string Description { get; set; }
         //Main Image
         public string PrimaryImage { get; set; }

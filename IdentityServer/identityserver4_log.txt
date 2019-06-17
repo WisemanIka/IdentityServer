@@ -1,0 +1,8 @@
+2019-06-17 12:14:40.878 +04:00 [WRN] The CORS protocol does not allow specifying a wildcard (any) origin and credentials at the same time. Configure the policy by listing individual origins if credentials needs to be supported.
+2019-06-17 12:14:40.915 +04:00 [WRN] The CORS protocol does not allow specifying a wildcard (any) origin and credentials at the same time. Configure the policy by listing individual origins if credentials needs to be supported.
+2019-06-17 12:14:41.510 +04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2019-06-17 12:14:41.554 +04:00 [WRN] The CORS protocol does not allow specifying a wildcard (any) origin and credentials at the same time. Configure the policy by listing individual origins if credentials needs to be supported.
+2019-06-17 12:14:41.568 +04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2019-06-17 12:18:34.812 +04:00 [WRN] The CORS protocol does not allow specifying a wildcard (any) origin and credentials at the same time. Configure the policy by listing individual origins if credentials needs to be supported.
+2019-06-17 12:18:34.817 +04:00 [WRN] The CORS protocol does not allow specifying a wildcard (any) origin and credentials at the same time. Configure the policy by listing individual origins if credentials needs to be supported.
+2019-06-17 12:18:34.829 +04:00 [INF] AuthenticationScheme: Identity.Application signed in.

@@ -10,6 +10,7 @@ namespace Fox.Catalog.Models.ViewModels.Product
         public List<string> CategoryId { get; set; }
         public string ProviderId { get; set; }
         public string Name { get; set; }
+        public string ShortDescription { get; set; }
         public string Description { get; set; }
         public string PrimaryImage { get; set; }
         public List<string> Images { get; set; }
