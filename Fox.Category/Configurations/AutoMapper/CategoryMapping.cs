@@ -12,9 +12,10 @@ namespace Fox.Category.Configurations.AutoMapper
         {
             CreateMap<CreateCategoryRequest, Categories>(MemberList.None)
                 .IgnoreAllNonExisting()
-                .ForMember(dest => dest.Id, src => src.Ignore())
+                .ForMember(dest => dest.Id, src => src.MapFrom(s => s.Id))
                 .ForMember(dest => dest.CreatedBy, src => src.MapFrom(s => s.UserId))
                 .ForMember(dest => dest.CreatedAt, src => src.UseValue(DateTime.UtcNow));
         }
+
     }
 }

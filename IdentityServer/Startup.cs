@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace IdentityServer
@@ -32,6 +33,16 @@ namespace IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("IdentityCorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
+
             services.AddDbContext<IdentityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
@@ -50,17 +61,19 @@ namespace IdentityServer
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAutoMapper(Assembly.GetAssembly(typeof(BaseMapping)));
             Mapper.AssertConfigurationIsValid();
 
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryIdentityResources(IdentityServerConfigurations.GetIdentityResources())
-                .AddInMemoryApiResources(IdentityServerConfigurations.GetApiResources())
-                .AddInMemoryClients(IdentityServerConfigurations.GetClients())
-                .AddAspNetIdentity<User>();
+            //services.AddIdentityServer()
+            //    .AddDeveloperSigningCredential()
+            //    .AddInMemoryIdentityResources(IdentityServerConfigurations.GetIdentityResources())
+            //    .AddInMemoryApiResources(IdentityServerConfigurations.GetApiResources())
+            //    .AddInMemoryClients(IdentityServerConfigurations.GetClients())
+            //    .AddAspNetIdentity<User>();
 
             var emailSenderService = Configuration.GetSection("EmailSenderSettings").Get<EmailSenderSettings>();
             services.RegisterEmailService(emailSenderService);
@@ -85,9 +98,11 @@ namespace IdentityServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("IdentityCorsPolicy");
+
             app.UseHttpContext();
 
-            app.UseIdentityServer();
+            //app.UseIdentityServer();
 
             app.UseMvcWithDefaultRoute();
 

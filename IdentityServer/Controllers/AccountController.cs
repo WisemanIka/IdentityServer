@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Fox.Common.Infrastructure;
 using Fox.Common.Responses;

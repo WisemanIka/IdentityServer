@@ -24,11 +24,4 @@
     <ProjectReference Include="..\Fox.Common\Fox.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infrastructure\Repositories\" />
-    <Folder Include="Infrastructure\Services\" />
-    <Folder Include="Infrastructure\Interfaces\" />
-    <Folder Include="Models\ViewModels\" />
-  </ItemGroup>
-
 </Project>

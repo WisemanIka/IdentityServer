@@ -16,6 +16,8 @@ namespace Fox.Catalog.Models
         public string Price { get; set; }
         public string Discount { get; set; }
         public string Quantity { get; set; }
+        public string Rating { get; set; }
+        public string Reviews { get; set; }
         public string Video { get; set; }
         public List<string> Sizes { get; set; }
         public List<string> Colors { get; set; }

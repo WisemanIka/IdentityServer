@@ -51,7 +51,7 @@ namespace Fox.Provider
             var configurationDocument = ConfigurationRepository.ReadConfiguration(environment).Result;
 
             //From Configuration Collection take only Provider Configs
-            var dbConfiguration = configurationDocument.GetAs<ConfigurationDocument>("Providers");
+            var dbConfiguration = configurationDocument.GetAs<ConfigurationDocument>("Provider");
 
             var connectionString = dbConfiguration.GetAs<string>("ConnectionString");
             var databaseName = dbConfiguration.GetAs<string>("Database");
@@ -89,7 +89,7 @@ namespace Fox.Provider
 
             app.UseCors("ProviderCorsPolicy");
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
             app.UseMvc();
 
