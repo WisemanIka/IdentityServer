@@ -3,7 +3,7 @@ using Fox.Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace Fox.BasketApi
+namespace Fox.Basket
 {
     public class Program
     {

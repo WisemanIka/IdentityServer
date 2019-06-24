@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Fox.BasketApi.Infrastructure.Interfaces;
-using Fox.BasketApi.Models.ViewModels.Review;
+using Fox.Catalog.Infrastructure.Interfaces;
+using Fox.Catalog.Models.ViewModels.Review;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
+using Fox.Common.Responses;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fox.BasketApi.Controllers
+namespace Fox.Catalog.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
+    [ValidationModel]
     public class ReviewController : ControllerBase
     {
         public readonly ILogger Logger;
@@ -33,7 +36,7 @@ namespace Fox.BasketApi.Controllers
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Fox.Basket.Api");
+                Logger.LogException(ex, "Fox.Catalog.Api");
                 return BadRequest(ex);
             }
         }
@@ -52,7 +55,7 @@ namespace Fox.BasketApi.Controllers
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Fox.Basket.Api");
+                Logger.LogException(ex, "Fox.Catalog.Api");
                 return BadRequest(ex);
             }
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Fox.BasketApi.Models.ViewModels
+namespace Fox.Basket.Models.ViewModels
 {
     public class Product
     {

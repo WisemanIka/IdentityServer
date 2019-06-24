@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Fox.BasketApi.Configurations.AutoMapper;
-using Fox.BasketApi.Extensions;
+using Fox.Basket.Configurations.AutoMapper;
+using Fox.Basket.Extensions;
 using Fox.Common.Configurations;
 using Fox.Common.Infrastructure;
 using Fox.Common.Logger;
@@ -13,7 +13,7 @@ using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
 
-namespace Fox.BasketApi
+namespace Fox.Basket
 {
     public class Startup
     {

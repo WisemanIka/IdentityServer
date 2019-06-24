@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Fox.BasketApi.Models
+﻿namespace Fox.Basket.Models
 {
-    public class Basket
+    public class Baskets
     {
     }
 }

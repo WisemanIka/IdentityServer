@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Fox.BasketApi.Models.ViewModels.Basket;
+using Fox.Basket.Models.ViewModels.Basket;
 
-namespace Fox.BasketApi.Infrastructure.Interfaces
+namespace Fox.Basket.Infrastructure.Interfaces
 {
     public interface IBasketService
     {

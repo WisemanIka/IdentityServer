@@ -25,6 +25,18 @@
       "UpstreamHttpMethod": []
     },
     {
+      "DownstreamPathTemplate": "/api/Review/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/review/{catchAll}",
+      "UpstreamHttpMethod": []
+    },
+    {
       "DownstreamPathTemplate": "/api/Category/{catchAll}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

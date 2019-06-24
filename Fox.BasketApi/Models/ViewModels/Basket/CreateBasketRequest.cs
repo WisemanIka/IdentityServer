@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Fox.BasketApi.Models.ViewModels.Basket
+namespace Fox.Basket.Models.ViewModels.Basket
 {
     public class CreateBasketRequest
     {

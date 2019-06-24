@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace Fox.BasketApi.Models.ViewModels.Review
+namespace Fox.Catalog.Models.ViewModels.Review
 {
     public class ReviewResponse
     {

@@ -1,8 +1,8 @@
-﻿using Fox.BasketApi.Infrastructure.Interfaces;
-using Fox.BasketApi.Infrastructure.Services;
+﻿using Fox.Basket.Infrastructure.Interfaces;
+using Fox.Basket.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Fox.BasketApi.Extensions
+namespace Fox.Basket.Extensions
 {
     public static class ServiceExtensions
     {
