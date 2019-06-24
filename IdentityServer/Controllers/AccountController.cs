@@ -18,9 +18,9 @@ namespace IdentityServer.Controllers
         public readonly IAccountService AccountService;
         public readonly ILogger Logger;
 
-        public AccountController(IAccountService userService, ILogger logger)
+        public AccountController(IAccountService accountService, ILogger logger)
         {
-            this.AccountService = userService;
+            this.AccountService = accountService;
             this.Logger = logger;
         }
 
@@ -85,8 +85,8 @@ namespace IdentityServer.Controllers
         {
             try
             {
-                var register = await AccountService.ConfirmEmail(userId, token);
-                return Ok(register);
+                var confirm = await AccountService.ConfirmEmail(userId, token);
+                return Ok(confirm);
             }
             catch (Exception ex)
             {

@@ -17,8 +17,8 @@ namespace Fox.Catalog.Configurations.AutoMapper
 
 
             CreateMap<Reviews, ReviewResponse>(MemberList.None)
-                .IgnoreAllNonExisting()
-                .ForMember(dest => dest.CatalogId, src => src.MapFrom(s => s.CatalogId));
+                .ForMember(dest => dest.Reviews, src => src.MapFrom(review => review))
+                .IgnoreAllNonExisting();
         }
     }
 }
