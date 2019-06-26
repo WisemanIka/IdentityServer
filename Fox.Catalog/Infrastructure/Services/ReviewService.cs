@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fox.BasketApi.Infrastructure.Interfaces;
-using Fox.BasketApi.Models;
-using Fox.BasketApi.Models.ViewModels.Review;
+using Fox.Catalog.Infrastructure.Interfaces;
+using Fox.Catalog.Models;
+using Fox.Catalog.Models.ViewModels.Review;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
 using Fox.Common.Responses;
 
-namespace Fox.BasketApi.Infrastructure.Services
+namespace Fox.Catalog.Infrastructure.Services
 {
     public class ReviewService : BaseMongoService, IReviewService
     {
@@ -22,8 +22,8 @@ namespace Fox.BasketApi.Infrastructure.Services
 
         private async Task<IEnumerable<ReviewResponse>> GetReviews(GetReviewRequest filter)
         {
-            var products = await _reviewRepository.GetReviews(filter);
-            var result = products.Map<Reviews, ReviewResponse>();
+            var reviews = await _reviewRepository.GetReviews(filter);
+            var result = reviews.Map<Reviews, ReviewResponse>();
             return result;
         }
 

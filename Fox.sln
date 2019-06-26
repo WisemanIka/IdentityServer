@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocelot.Gateway", "Ocelot\Oc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Fox.Services", "4.Fox.Services", "{0208B4D9-E41F-41B1-9F48-5FBC8CA06116}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fox.BasketApi", "Fox.BasketApi\Fox.BasketApi.csproj", "{E1453906-4646-4B1A-8F1E-BD0C148B36C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fox.Basket", "Fox.BasketApi\Fox.Basket.csproj", "{E1453906-4646-4B1A-8F1E-BD0C148B36C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{48D12A29-85BA-4918-8D8F-CAA63BB76F98}"
 EndProject
@@ -47,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Category", "Category", "{AB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fox.Category", "Fox.Category\Fox.Category.csproj", "{23520212-BD16-48EE-A9A4-BB986DBF83DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fox.Provider", "Fox.Provider\Fox.Provider.csproj", "{AC8E1AE3-9505-41A8-8B0E-3422F07009F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fox.Provider", "Fox.Provider\Fox.Provider.csproj", "{AC8E1AE3-9505-41A8-8B0E-3422F07009F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

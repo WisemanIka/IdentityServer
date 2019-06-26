@@ -1,4 +1,4 @@
-﻿namespace Fox.BasketApi.Models.ViewModels.Review
+﻿namespace Fox.Catalog.Models.ViewModels.Review
 {
     public class CreateReviewRequest
     {

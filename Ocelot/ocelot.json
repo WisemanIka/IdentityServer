@@ -13,6 +13,19 @@
       "UpstreamHttpMethod": []
     },
     {
+      "DownstreamPathTemplate": "/api/User/GetUsers",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/user/GetUsers",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "userssss"
+    },
+    {
       "DownstreamPathTemplate": "/api/Catalog/{catchAll}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -23,6 +36,19 @@
       ],
       "UpstreamPathTemplate": "/product/{catchAll}",
       "UpstreamHttpMethod": []
+    },
+    {
+      "DownstreamPathTemplate": "/api/Review/GetAll",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/review/GetAll",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "user-reviews"
     },
     {
       "DownstreamPathTemplate": "/api/Category/{catchAll}",
@@ -89,6 +115,15 @@
     //  //  "AllowedScopes": []
     //  //}
     //}
+  ],
+  "Aggregates": [
+    {
+      "ReRouteKeys": [
+        "user-reviews",
+        "userssss"
+      ],
+      "UpstreamPathTemplate": "/reviews"
+    }
   ],
   "GlobalConfiguration": {
 

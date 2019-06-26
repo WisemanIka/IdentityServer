@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Fox.BasketApi.Infrastructure.Interfaces;
-using Fox.BasketApi.Models.ViewModels.Basket;
+using Fox.Basket.Infrastructure.Interfaces;
+using Fox.Basket.Models.ViewModels.Basket;
 using Fox.Common.Extensions;
 using Fox.Common.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fox.BasketApi.Controllers
+namespace Fox.Basket.Controllers
 {
     [Route("api/[controller]")]
     public class BasketController : ControllerBase

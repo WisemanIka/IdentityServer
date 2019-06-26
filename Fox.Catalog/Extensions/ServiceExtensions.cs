@@ -11,6 +11,9 @@ namespace Fox.Catalog.Extensions
         {
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
         }
     }
 }

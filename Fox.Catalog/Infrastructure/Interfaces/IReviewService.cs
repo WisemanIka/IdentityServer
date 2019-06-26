@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Fox.BasketApi.Models.ViewModels.Review;
+using Fox.Catalog.Models.ViewModels.Review;
 using Fox.Common.Responses;
 
-namespace Fox.BasketApi.Infrastructure.Interfaces
+namespace Fox.Catalog.Infrastructure.Interfaces
 {
     public interface IReviewService
     {

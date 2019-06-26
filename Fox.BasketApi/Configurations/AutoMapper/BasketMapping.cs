@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using Fox.BasketApi.Models;
-using Fox.BasketApi.Models.ViewModels.Basket;
+using Fox.Basket.Models;
+using Fox.Basket.Models.ViewModels.Basket;
 using Fox.Common.Extensions;
 
-namespace Fox.BasketApi.Configurations.AutoMapper
+namespace Fox.Basket.Configurations.AutoMapper
 {
     public class BasketMapping : Profile
     {
         public BasketMapping()
         {
-            CreateMap<CreateBasketRequest, Basket>(MemberList.None)
+            CreateMap<CreateBasketRequest, Baskets>(MemberList.None)
                 .IgnoreAllNonExisting();
         }
     }
