@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Fox.Common.Infrastructure;
 using Fox.Common.Responses;
 using IdentityServer.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServer.Controllers
@@ -17,10 +15,10 @@ namespace IdentityServer.Controllers
     [ValidationModel]
     public class UserController : ControllerBase
     {
-        public readonly IAccountService UserService;
+        public readonly IUserService UserService;
         public readonly ILogger Logger;
 
-        public UserController(IAccountService userService, ILogger logger)
+        public UserController(IUserService userService, ILogger logger)
         {
             this.UserService = userService;
             this.Logger = logger;
@@ -29,16 +27,16 @@ namespace IdentityServer.Controllers
         [AllowAnonymous]
         [HttpGet("GetUsers")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetUsers()
+        public IActionResult GetUsers(List<string> userIds)
         {
             try
             {
-                var register = await UserService.ConfirmEmail("", "");
-                return Ok(register);
+                var users = UserService.GetUserData(userIds);
+                return Ok(users);
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "IdentityServer.Api");
+                Logger.LogException(ex, "IdentityServer.Api - User");
                 return BadRequest(ex);
             }
         }

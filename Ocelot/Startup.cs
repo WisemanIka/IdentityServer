@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
+using Ocelot.Gateway.Aggregators;
 using Ocelot.Middleware;
 
 namespace Ocelot.Gateway
@@ -19,6 +20,15 @@ namespace Ocelot.Gateway
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("OcelotCorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
             var key = "IdentityServiceApiKey";
 
             services.AddAuthentication(o =>
@@ -42,6 +52,12 @@ namespace Ocelot.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
+
+            app.UseCors("OcelotCorsPolicy");
 
             app.UseAuthentication();
 

@@ -23,7 +23,7 @@
       ],
       "UpstreamPathTemplate": "/user/GetUsers",
       "UpstreamHttpMethod": [ "Get" ],
-      "Key": "userssss"
+      "Key": "user-data"
     },
     {
       "DownstreamPathTemplate": "/api/Catalog/{catchAll}",
@@ -115,15 +115,16 @@
     //  //  "AllowedScopes": []
     //  //}
     //}
-  ],
-  "Aggregates": [
-    {
-      "ReRouteKeys": [
-        "user-reviews",
-        "userssss"
-      ],
-      "UpstreamPathTemplate": "/reviews"
-    }
+  ]
+  //,
+  //"Aggregates": [
+  //  {
+  //    "ReRouteKeys": [
+  //      "user-data",
+  //      "user-reviews"
+  //    ],
+  //    "UpstreamPathTemplate": "/reviews"
+  //  }
   ],
   "GlobalConfiguration": {
 
